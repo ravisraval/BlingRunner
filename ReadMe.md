@@ -3,8 +3,7 @@
 ## Background
 
 
-
-[BlingRunner](https://github.com/ravisraval/BlingRunner) is a javascript browser game. It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Redux architectural framework on the frontend.
+[BlingRunner](https://github.com/ravisraval/BlingRunner) is a javascript browser game. Players control a car and must move the car over successive "blings": randomly generated objects on a scrolling board. 
 
 ## Key Features, MVP
 ***
@@ -14,35 +13,15 @@
 ####
 
 
-![Route Feed](images/route_feed.png)
-
-
-
-
-#### Logging Personal Workouts
-
-
-![New Workout Form](images/new_workout.png)
-
-
-
-#### Displaying Previous Workouts
-
-
-![Workout Feed](images/workout_feed.png)
-
-
 ## Wireframes
+![Game Mockup](docs/BlingRunner.png)
 
 ## Technologies Utilized
+To display, animate, and add sound to BlingRunner, I will use the CreateJS suite. Specifically, this contains EaselJS for displaying content on the canvas, TweenJS for animation, and SoundJS for audio. As object display, animation, and sound are crucial to BlingRunner, this library suite is a perfect fit.
+
 
 ##Implementation Timeline
 
-Additional Resources
-
-[Database Schema](./schema.md)
-[API Endpoints](./api-endpoints.md)
-[Sample Redux State](./sample-state.md)
 
 ## Potential Bonus Features
 
