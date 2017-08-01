@@ -6,21 +6,26 @@ function init() {
 class Game {
   constructor() {
     this.handleTick = this.handleTick.bind(this);
+    this.flashReset = this.flashReset.bind(this);
+    this.keyHandler = this.keyHandler.bind(this);
     this.handleBlingCollect = this.handleBlingCollect.bind(this);
     this.handleLevelOver = this.handleLevelOver.bind(this);
+    this.handleGameOver = this.handleGameOver.bind(this);
     this.setup = this.setup.bind(this);
-    this.accel = 1;
-    this.maxSpeed = 50;
-    this.scrollSpeed = 7;
+    this.accel = 2;
+    this.maxSpeed = 10;
+    this.scrollSpeed = 5;
     // this.hlines = [];
     this.blings = {};
-    this.blingCountdownStart = 400;
+    this.blingCountdownStart = 200;
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
     this.userScore = 0;
     this.hitBling = false;
     this.levelBlingCount = 10;
     this.levelMusic = "assets/audio/background.mp3"
+    this.level = 1;
+    this.levelScoreMin = 20;
   }
 
   handleBlingCollect(bling) {
@@ -55,6 +60,7 @@ class Game {
       }
       let graphics = new createjs.Graphics().beginFill(color).drawRect(0, 0, 64, 64);
       this.blings[this.blingCount] = new createjs.Shape(graphics);
+      this.blings[this.blingCount].crossOrigin = "Anonymous";
       this.blings[this.blingCount].x = 100 * this.spot + 18;
       this.stage.addChild(this.blings[this.blingCount]);
       this.blingCount += 1;
@@ -124,6 +130,7 @@ class Game {
 
   drawHorizLines() {
     this.hline1 = new createjs.Shape();
+    this.hline1.crossOrigin = "Anonymous";
     this.stage.addChild(this.hline1);
     this.hline1.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.hline1.graphics.moveTo(0,0);
@@ -131,6 +138,7 @@ class Game {
     this.hline1.graphics.endStroke();
 
     this.hline2 = new createjs.Shape();
+    this.hline2.crossOrigin = "Anonymous";
     this.stage.addChild(this.hline2);
     this.hline2.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.hline2.graphics.moveTo(0,100);
@@ -138,6 +146,7 @@ class Game {
     this.hline2.graphics.endStroke();
 
     this.hline3 = new createjs.Shape();
+    this.hline3.crossOrigin = "Anonymous";
     this.stage.addChild(this.hline3);
     this.hline3.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.hline3.graphics.moveTo(0,200);
@@ -145,6 +154,7 @@ class Game {
     this.hline3.graphics.endStroke();
 
     this.hline4 = new createjs.Shape();
+    this.hline4.crossOrigin = "Anonymous";
     this.stage.addChild(this.hline4);
     this.hline4.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.hline4.graphics.moveTo(0,300);
@@ -152,6 +162,7 @@ class Game {
     this.hline4.graphics.endStroke();
 
     this.hline5 = new createjs.Shape();
+    this.hline5.crossOrigin = "Anonymous";
     this.stage.addChild(this.hline5);
     this.hline5.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.hline5.graphics.moveTo(0,400);
@@ -163,6 +174,7 @@ class Game {
 
   drawVertLines() {
     this.vline1 = new createjs.Shape();
+    this.vline1.crossOrigin = "Anonymous";
     this.stage.addChild(this.vline1);
     this.vline1.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.vline1.graphics.moveTo(100,0);
@@ -170,6 +182,7 @@ class Game {
     this.vline1.graphics.endStroke();
 
     this.vline2 = new createjs.Shape();
+    this.vline2.crossOrigin = "Anonymous";
     this.stage.addChild(this.vline2);
     this.vline2.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.vline2.graphics.moveTo(200,0);
@@ -177,6 +190,7 @@ class Game {
     this.vline2.graphics.endStroke();
 
     this.vline3 = new createjs.Shape();
+    this.vline3.crossOrigin = "Anonymous";
     this.stage.addChild(this.vline3);
     this.vline3.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.vline3.graphics.moveTo(300,0);
@@ -184,6 +198,7 @@ class Game {
     this.vline3.graphics.endStroke();
 
     this.vline4 = new createjs.Shape();
+    this.vline4.crossOrigin = "Anonymous";
     this.stage.addChild(this.vline4);
     this.vline4.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
     this.vline4.graphics.moveTo(400,0);
@@ -191,42 +206,90 @@ class Game {
     this.vline4.graphics.endStroke();
   }
 
+  keyHandler(event) {
+    if (event.key === "ArrowRight") {
+      this.xMomentum += this.accel;
+    }
+    if (event.key === "ArrowLeft") {
+      this.xMomentum -= this.accel;
+    }
+    if (event.key === "ArrowUp") {
+      this.yMomentum -= this.accel;
+    }
+    if (event.key === "ArrowDown") {
+      this.yMomentum += this.accel;
+    }
+    if (event.key === " " || event.key === "Escape") {
+      if (this.paused) {
+        createjs.Ticker.addEventListener("tick", this.handleTick);
+        this.paused = false;
+        this.stage.removeChild(this.pauseText);
+      } else {
+        createjs.Ticker.removeEventListener("tick", this.handleTick);
+        this.paused = true;
+        this.pauseText = new createjs.Text("Game Paused", "34px Arial", "#000000");
+        this.pauseText.x = 100;
+        this.pauseText.textBaseline = "alphabetic";
+        this.stage.addChild(this.pauseText);
+      }
+    }
+  }
+
   handleKeyPress() {
-    window.addEventListener("keydown", event => {
-      if (event.key === "ArrowRight") {
-        this.xMomentum += this.accel;
-      }
-      if (event.key === "ArrowLeft") {
-        this.xMomentum -= this.accel;
-      }
-      if (event.key === "ArrowUp") {
-        this.yMomentum -= this.accel;
-      }
-      if (event.key === "ArrowDown") {
-        this.yMomentum += this.accel;
-      }
-      if (event.key === " " || event.key === "Escape") {
-        if (this.paused) {
-          createjs.Ticker.addEventListener("tick", this.handleTick);
-          this.paused = false;
-          this.pauseText.alpha = 0;
-        } else {
-          createjs.Ticker.removeEventListener("tick", this.handleTick);
-          this.paused = true;
-          this.pauseText = new createjs.Text("Game Paused", "34px Arial", "#ff7700");
-          this.pauseText.x = 250;
-          this.pauseText.y = 400;
-          this.pauseText.visible = true;
-          this.pauseText.alpha = 1;
-          this.stage.addChild(this.pauseText);
-        }
-      }
-    });
+
+    window.addEventListener("keydown", this.keyHandler)
   }
 
   handleLevelOver() {
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     this.paused = true;
-    document.write(`you have ${this.userScore} points`);
+    this.stage.clear();
+    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    window.removeEventListener("keydown", this.keyHandler);
+    if ( this.userScore < this.levelScoreMin ) {
+      this.handleGameOver();
+    } else {
+      let text = new createjs.Text(`Level ${this.level} Complete! \n You have ${this.userScore} points.`, "50px Arial", "#000000");
+      text.x = 40;
+      text.y = 300;
+      text.textBaseline = "alphabetic";
+      this.stage.addChild(text);
+      this.level += 1;
+      this.levelBlingCount += 7;
+      this.scrollSpeed = Math.floor(this.scrollSpeed * 1.2);
+    }
+    // document.write(`you have ${this.userScore} points`);
   }
+
+  handleGameOver() {
+    let text = new createjs.Text("You didn't grab enough bling!", "30px Arial", "#000000");
+    text.x = 50;
+    text.y = 200;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(text);
+    let overText = new createjs.Text("GAME OVER", "80px Arial", "#000000");
+    overText.x = 10;
+    overText.y = 260;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(overText);
+
+    let resetText = new createjs.Text("Press any key to play again.", "20px Arial", "#000000");
+    resetText.x = 120;
+    resetText.y = 450;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(resetText);
+      createjs.Ticker.addEventListener("tick", this.flashReset);
+    window.addEventListener("keydown", event => {
+      if (event.key) {
+        this.stage.removeAllChildren();
+        this.stage.update();
+        init();
+        window.removeEventListener("keydown", arguments.callee);
+      }
+    })
+  }
+
+  flashReset() {
+
+  };
 }
