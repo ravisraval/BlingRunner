@@ -17,7 +17,7 @@
 ![Game Mockup](docs/BlingRunner.png)
 
 ## Technologies Utilized
-To display, animate, and add sound to BlingRunner, I will use the CreateJS suite. Specifically, this contains EaselJS for displaying content on the canvas, TweenJS for animation, and SoundJS for audio. As object display, animation, and sound are crucial to BlingRunner, this library suite is a perfect fit.
+To display, animate, and add sound to BlingRunner, I will use the CreateJS suite. Specifically, this contains EaselJS for displaying content on the canvas, TweenJS for animation, and SoundJS for audio. In concert with TweenJs, I will use AnimeJs for its smooth object animationAs object display, animation, and sound are crucial to BlingRunner, this library suite is a perfect fit.
 
 
 ##Implementation Timeline
