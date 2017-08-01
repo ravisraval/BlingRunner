@@ -53,11 +53,11 @@ this.ndgmr = this.ndgmr || {};
 
   var checkPixelCollision = function(bitmap1, bitmap2, alphaThreshold, getRect) {
     //display the intersecting canvases for debugging
-    if ( ndgmr.DEBUG || ndgmr.DEBUG_COLLISION ) { 
+    if ( ndgmr.DEBUG || ndgmr.DEBUG_COLLISION ) {
       document.body.appendChild(collisionCanvas);
       document.body.appendChild(collisionCanvas2);
     }
-    
+
     getRect = getRect || false;
 
     var areObjectsCloseEnough,
@@ -82,9 +82,9 @@ this.ndgmr = this.ndgmr || {};
 
     //setting the canvas size
     collisionCanvas.width  = intersection.width;
-    collisionCanvas.height = intersection.height; 
+    collisionCanvas.height = intersection.height;
     collisionCanvas2.width  = intersection.width;
-    collisionCanvas2.height = intersection.height; 
+    collisionCanvas2.height = intersection.height;
 
     imageData1 = _intersectingImagePart(intersection,bitmap1,collisionCtx,1);
     imageData2 = _intersectingImagePart(intersection,bitmap2,collisionCtx2,2);
@@ -92,7 +92,7 @@ this.ndgmr = this.ndgmr || {};
     //compare the alpha values to the threshold and return the result
     // = true if pixels are both > alphaThreshold at one coordinate
     pixelIntersection = _compareAlphaValues(imageData1,imageData2,intersection.width,intersection.height,alphaThreshold, getRect);
-    
+
     if ( pixelIntersection ) {
       pixelIntersection.x  += intersection.x;
       pixelIntersection.x2 += intersection.x;
@@ -119,7 +119,7 @@ this.ndgmr = this.ndgmr || {};
     ir2 = bitmap2 instanceof createjs.Bitmap
          ? {width:bitmap2.image.width, height:bitmap2.image.height}
          : bitmap2.spriteSheet.getFrame(bitmap2.currentFrame).rect;
-    
+
     //precheck if objects are even close enough
     return ( Math.abs(b2.x-b1.x) < ir2.width *bitmap2.scaleX+ir1.width *bitmap1.scaleX
           && Math.abs(b2.y-b1.y) < ir2.height*bitmap2.scaleY+ir1.height*bitmap2.scaleY )
@@ -132,9 +132,9 @@ this.ndgmr = this.ndgmr || {};
       image = bitmap.image;
     } else if ( bitmap instanceof createjs.Sprite ) {
     frame = bitmap.spriteSheet.getFrame( bitmap.currentFrame )
-      frameName = frame.image.src + ':' + 
-                  frame.rect.x + ':' + frame.rect.y + ':' + 
-                  frame.rect.width  + ':' + frame.rect.height;// + ':' + frame.rect.regX  + ':' + frame.rect.regY 
+      frameName = frame.image.src + ':' +
+                  frame.rect.x + ':' + frame.rect.y + ':' +
+                  frame.rect.width  + ':' + frame.rect.height;// + ':' + frame.rect.regX  + ':' + frame.rect.regY
       if ( cachedBAFrames[frameName] ) {
         image = cachedBAFrames[frameName];
       } else {
@@ -143,14 +143,14 @@ this.ndgmr = this.ndgmr || {};
     } else if ( bitmap instanceof createjs.MovieClip ) {
       var mBitmap;
       if(bitmap.instance.instance != undefined) {
-        mBitmap = bitmap.instance.instance; 
-      } else if (bitmap.instance != undefined) {		  
-        mBitmap = bitmap.instance; 
+        mBitmap = bitmap.instance.instance;
+      } else if (bitmap.instance != undefined) {
+        mBitmap = bitmap.instance;
       }
       frame = mBitmap.spriteSheet.getFrame( mBitmap.currentFrame )
-      frameName = frame.image.src + ':' + 
-                  frame.rect.x + ':' + frame.rect.y + ':' + 
-                  frame.rect.width  + ':' + frame.rect.height;// + ':' + frame.rect.regX  + ':' + frame.rect.regY 
+      frameName = frame.image.src + ':' +
+                  frame.rect.x + ':' + frame.rect.y + ':' +
+                  frame.rect.width  + ':' + frame.rect.height;// + ':' + frame.rect.regX  + ':' + frame.rect.regY
       if ( cachedBAFrames[frameName] ) {
         image = cachedBAFrames[frameName];
       } else {
@@ -183,7 +183,7 @@ this.ndgmr = this.ndgmr || {};
         for ( x = 0; x < width; ++x) {
             alpha1 = imageData1.length > offset+1 ? imageData1[offset] / 255 : 0;
             alpha2 = imageData2.length > offset+1 ? imageData2[offset] / 255 : 0;
-            
+
             if ( alpha1 > alphaThreshold && alpha2 > alphaThreshold ) {
               if ( getRect ) {
                 if ( x < pixelRect.x  ) pixelRect.x  = x;
@@ -273,7 +273,7 @@ this.ndgmr = this.ndgmr || {};
       if ( bounds.y == Infinity ) bounds.y = 0;
       if ( bounds.x2 == Infinity ) bounds.x2 = 0;
       if ( bounds.y2 == Infinity ) bounds.y2 = 0;
-      
+
       bounds.width = bounds.x2 - bounds.x;
       bounds.height = bounds.y2 - bounds.y;
       delete bounds.x2;
@@ -305,7 +305,7 @@ this.ndgmr = this.ndgmr || {};
       imgr.regY = imgr.regY || 0; imgr.height = imgr.height || 0;
       bounds.regX = imgr.regX;
       bounds.regY = imgr.regY;
-      
+
       gp  = obj.localToGlobal(0         -imgr.regX,0          -imgr.regY);
       gp2 = obj.localToGlobal(imgr.width-imgr.regX,imgr.height-imgr.regY);
       gp3 = obj.localToGlobal(imgr.width-imgr.regX,0          -imgr.regY);
