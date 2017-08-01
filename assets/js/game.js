@@ -6,6 +6,7 @@ function init() {
 class Game {
   constructor() {
     this.handleTick = this.handleTick.bind(this);
+    this.handleBlingCollect = this.handleBlingCollect.bind(this);
     this.setup = this.setup.bind(this);
     this.accel = 2;
     this.maxSpeed = 50;
@@ -15,6 +16,12 @@ class Game {
     this.blingCountdownStart = 300;
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
+    this.userScore = 0;
+  }
+
+  handleBlingCollect(bling) {
+    this.userScore += 1;
+    this.stage.removeChild(bling);
   }
 
   handleTick(event) {
@@ -27,19 +34,25 @@ class Game {
     // });
     this.blingCountdown -= 10;
     if (this.blingCountdown === 0) {
+      createjs.Sound.play("background");
       this.blingCountdown = this.blingCountdownStart;
       this.blings[this.blingCount] = new createjs.Bitmap("assets/images/star-icon.png");
       this.spot = Math.floor(Math.random(5) * 6);
       this.blings[this.blingCount].x = 110 * this.spot;
       this.stage.addChild(this.blings[this.blingCount]);
       this.blingCount += 1;
+      createjs.Sound.play("blingCreate");
     }
     if (this.blingCount > 0) {
       let fn = this;
       for(let i = 0; i < this.blingCount; i ++) {
         fn.blings[i].y += fn.scrollSpeed;
+        // if (ndgmr.checkRectCollision(fn.blings[i], fn.userCa)) {
+        //   fn.handleBlingCollect(fn.blings[i]);
+        // }
       }
     }
+
     if (this.yMomentum >= this.maxSpeed) {
       this.yMomentum = this.maxSpeed;
     }
@@ -61,6 +74,8 @@ class Game {
   }
 
   setup() {
+    createjs.Sound.registerSound("assets/audio/blingSpawn.mp3", "blingCreate");
+    createjs.Sound.registerSound("assets/audio/background.mp3", "background", 1);
     this.xMomentum = 0;
     this.yMomentum = 0;
     this.canvas = document.getElementById("canvasel");
@@ -175,4 +190,24 @@ class Game {
       }
     });
   }
+
+  detect_object_collision(obj1, obj2) {
+    // user noname from FragenWissen.com
+    if (obj1.visible && obj2.visible) {
+        obj1.setBounds(obj1.nominalBounds.x + obj1.x, obj1.nominalBounds.y + obj1.y, obj1.nominalBounds.width, obj1.nominalBounds.height);
+        obj2.setBounds(obj2.nominalBounds.x + obj2.x, obj2.nominalBounds.y + obj2.y, obj2.nominalBounds.width, obj2.nominalBounds.height);
+        obj1 = obj1.getBounds();
+        obj2 = obj2.getBounds();
+        return !(
+            ((obj1.y + obj1.height) < (obj2.y)) ||
+            (obj1.y > (obj2.y + obj2.height)) ||
+            ((obj1.x + obj1.width) < obj2.x) ||
+            (obj1.x > (obj2.x + obj2.width))
+        );
+    } else {
+        return false;
+    }
+}
+
+
 }
