@@ -8,11 +8,13 @@ class Game {
     this.handleTick = this.handleTick.bind(this);
     this.setup = this.setup.bind(this);
     this.accel = 2;
-    this.scrollSpeed = 3;
+    this.maxSpeed = 50;
+    this.scrollSpeed = 7;
     // this.hlines = [];
     this.blings = {};
-    this.blingCountdownStart = 100;
+    this.blingCountdownStart = 300;
     this.blingCountdown = this.blingCountdownStart;
+    this.blingCount = 0;
   }
 
   handleTick(event) {
@@ -26,21 +28,24 @@ class Game {
     this.blingCountdown -= 10;
     if (this.blingCountdown === 0) {
       this.blingCountdown = this.blingCountdownStart;
-      this.blings[this.blings.length] = new createjs.Bitmap("assets/images/star-icon.png");
+      this.blings[this.blingCount] = new createjs.Bitmap("assets/images/star-icon.png");
       this.spot = Math.floor(Math.random(5) * 6);
-      this.blings[this.blings.length].x = 110 * this.spot;
-      this.stage.addChild(this.blings[this.blings.length]);
+      this.blings[this.blingCount].x = 110 * this.spot;
+      this.stage.addChild(this.blings[this.blingCount]);
+      this.blingCount += 1;
     }
-    console.log(this.blings);
-    // if (this.blings.length !== 0) {
-    //   console.log(this.blings);
-    //   let fn = this;
-    //   this.blings.keys.forEach(key => {
-    //     console.log(fn.blings);
-    //     fn.blings[key].y += fn.scrollSpeed;
-    //   })
-    // }
-
+    if (this.blingCount > 0) {
+      let fn = this;
+      for(let i = 0; i < this.blingCount; i ++) {
+        fn.blings[i].y += fn.scrollSpeed;
+      }
+    }
+    if (this.yMomentum >= this.maxSpeed) {
+      this.yMomentum = this.maxSpeed;
+    }
+    if (this.xMomentum >= this.maxSpeed) {
+      this.xMomentum = this.maxSpeed;
+    }
     if (this.userCar.y > 370) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = 370 };
     if (this.userCar.y < -17) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = -17};
     this.userCar.skewX = this.xMomentum / 3;
