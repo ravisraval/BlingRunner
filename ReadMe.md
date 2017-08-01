@@ -3,7 +3,7 @@
 ## Background
 
 
-[BlingRunner](https://github.com/ravisraval/BlingRunner) is a javascript browser game. Players control a car and must move the car over successive "blings": randomly generated objects on a scrolling board. 
+[BlingRunner](https://github.com/ravisraval/BlingRunner) is a javascript browser game. Players control a car and must move the car over successive "blings": randomly generated objects on a scrolling board.
 
 ## Key Features, MVP
 ***
@@ -22,10 +22,14 @@ To display, animate, and add sound to BlingRunner, I will use the CreateJS suite
 
 ##Implementation Timeline
 
+*  Day 1: Complete basic project setup, pause function, and car physics.
+*  Day 2: Complete board scrolling, bling generation, and item collision.
+*  Day 3: Complete point system, sounds, start styling and upgrade store if time.
+*  Day 4: Complete styling and upgrade store.
 
 ## Potential Bonus Features
 
 BlingRunner's core functionality could be improved upon with the following features:
-*
+*  Upgrades available via store after every level
 *
 *
