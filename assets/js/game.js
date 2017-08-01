@@ -9,17 +9,18 @@ class Game {
     this.handleBlingCollect = this.handleBlingCollect.bind(this);
     this.handleLevelOver = this.handleLevelOver.bind(this);
     this.setup = this.setup.bind(this);
-    this.accel = 2;
+    this.accel = 1;
     this.maxSpeed = 50;
     this.scrollSpeed = 7;
     // this.hlines = [];
     this.blings = {};
-    this.blingCountdownStart = 100;
+    this.blingCountdownStart = 400;
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
     this.userScore = 0;
     this.hitBling = false;
     this.levelBlingCount = 10;
+    this.levelMusic = "assets/audio/background.mp3"
   }
 
   handleBlingCollect(bling) {
@@ -72,6 +73,7 @@ class Game {
         }
       }
     }
+    //FUTURE: modify so user can catch last blings
     if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };
     //set top speed
     if (this.yMomentum >= this.maxSpeed) {
@@ -100,14 +102,17 @@ class Game {
   }
 
   setup() {
+    let queue = new createjs.LoadQueue(false);
+    queue.loadFile({id: "blingCreate", src: "assets/audio/blingSpawn.mp3"})
     createjs.Sound.registerSound("assets/audio/blingSpawn.mp3", "blingCreate");
-    createjs.Sound.registerSound("assets/audio/background.mp3", "background", 1);
+    createjs.Sound.registerSound(this.levelMusic, "background", 1);
     this.xMomentum = 0;
     this.yMomentum = 0;
     this.canvas = document.getElementById("canvas");
     this.stage = new createjs.Stage(this.canvas);
     this.drawVertLines();
     this.userCar = new createjs.Bitmap("assets/images/Topdown_vehicle_sprites_pack/Black_viper.png");
+    this.userCar.crossOrigin = "Anonymous";
     this.userCar.setTransform(190,480,.5,.5);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.stage.addChild(this.userCar, this.pauseText);
@@ -213,13 +218,15 @@ class Game {
           this.pauseText.y = 400;
           this.pauseText.visible = true;
           this.pauseText.alpha = 1;
+          this.stage.addChild(this.pauseText);
         }
       }
     });
   }
 
-
   handleLevelOver() {
-
+    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    this.paused = true;
+    document.write(`you have ${this.userScore} points`);
   }
 }
