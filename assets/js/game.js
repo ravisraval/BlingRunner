@@ -13,7 +13,7 @@ class Game {
     this.scrollSpeed = 7;
     // this.hlines = [];
     this.blings = {};
-    this.blingCountdownStart = 300;
+    this.blingCountdownStart = 900;
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
     this.userScore = 0;
