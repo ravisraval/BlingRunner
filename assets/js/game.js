@@ -31,7 +31,7 @@ class Game {
     this.levelMusic = "assets/audio/background.mp3"
     this.level = 1;
     this.friction = .5;
-    this.levelScoreMin = 20;
+    this.levelScoreMin = 35;
   }
 
   handleBlingCollect(bling) {
@@ -313,7 +313,7 @@ class Game {
       this.blingCountdown += 40;
       this.blingCount = 0;
       this.userScoreCurrentLevel = 0;
-      this.scrollSpeed = Math.floor(this.scrollSpeed * 1.3);
+      this.scrollSpeed = Math.floor(this.scrollSpeed * 1.35);
 
       let continueText = new createjs.Text("Press space to continue.", "20px Arial", "#000000");
       continueText.x = 150;
