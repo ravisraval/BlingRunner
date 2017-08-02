@@ -7,12 +7,9 @@ class Game {
   constructor() {
     this.blingCaptureSound = this.blingCaptureSound.bind(this);
     this.handleTick = this.handleTick.bind(this);
-    this.flashReset = this.flashReset.bind(this);
     this.keyHandler = this.keyHandler.bind(this);
-    this.handleUpgradeAccel = this.handleUpgradeAccel.bind(this);
     this.waitForSpacebar = this.waitForSpacebar.bind(this);
     this.handleBlingCollect = this.handleBlingCollect.bind(this);
-    this.upgradeStore = this.upgradeStore.bind(this);
     this.handleLevelOver = this.handleLevelOver.bind(this);
     this.handleGameOver = this.handleGameOver.bind(this);
     // this.renderMenu = this.renderMenu.bind(this);
@@ -293,7 +290,6 @@ class Game {
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     this.paused = true;
     this.stage.clear();
-    createjs.Ticker.removeEventListener("tick", this.handleTick);
     if ( this.userScoreCurrentLevel < this.levelScoreMin ) {
       this.handleGameOver();
     } else {
@@ -309,9 +305,6 @@ class Game {
       this.blingCount = 0;
       this.userScoreCurrentLevel = 0;
       this.scrollSpeed = Math.floor(this.scrollSpeed * 1.3);
-      console.log(`level: ${this.level}`);
-      console.log(`bling Count: ${this.levelBlingCount}`);
-      console.log(`scroll speed: ${this.scrollSpeed}`);
 
       let continueText = new createjs.Text("Press space to continue.", "20px Arial", "#000000");
       continueText.x = 150;
@@ -326,13 +319,12 @@ class Game {
   waitForSpacebar(event) {
     if (event.key === " ") {
       this.stage.removeAllChildren();
+      this.stage.clear();
       this.stage.update();
       this.gameInit();
-      this.upgradeStore();
       window.removeEventListener("keydown", this.waitForSpacebar);
     }
   }
-
 
   handleGameOver() {
     let text = new createjs.Text("You didn't grab enough blings!", "30px Arial", "#000000");
@@ -346,25 +338,12 @@ class Game {
     text.textBaseline = "alphabetic";
     this.stage.addChild(overText);
 
-    let resetText = new createjs.Text("Press any key to play again.", "20px Arial", "#000000");
+    let resetText = new createjs.Text("Press space to play again.", "20px Arial", "#000000");
     resetText.x = 120;
     resetText.y = 450;
     text.textBaseline = "alphabetic";
     this.stage.addChild(resetText);
-    createjs.Ticker.addEventListener("tick", this.flashReset);
-    window.addEventListener("keydown", event => {
-      if (event.key) {
-        this.stage.removeAllChildren();
-        this.stage.update();
-        window.removeEventListener("keydown", arguments.callee);
-        createjs.Ticker.removeEventListener("tick", this.flashReset);
-        init();
-      }
-    })
-  }
-
-  flashReset() {
-
+    window.addEventListener("keydown", this.waitForSpacebar);
   }
 
   // renderMenu() {
@@ -381,34 +360,34 @@ class Game {
   //   let optionsButton;
   //   let creditsButton;
   // }
-    handleUpgradeAccel() {
-      if (this.userScoreCurrentLevel > 30 * this.level * 1.2) {
-        this.accel += .3;
-        this.accelLevel += 1;
-        console.log("accel upgraded yo");
-      } else {
-        console.log("not enough creds, sory");
-      }
-    }
+    // handleUpgradeAccel() {
+    //   if (this.userScoreCurrentLevel > 30 * this.level * 1.2) {
+    //     this.accel += .3;
+    //     this.accelLevel += 1;
+    //     console.log("accel upgraded yo");
+    //   } else {
+    //     console.log("not enough creds, sory");
+    //   }
+    // }
 
-    upgradeStore() {
-      this.stage.enableMouseOver();
-      let data = {
-          images: ["assets/images/UIpack/Spritesheet/blueSheet.png"],
-          frames: { width: 100, height: 250},
-          animations: { normal: [0], hover: [1], clicked: [2] }
-      };
-      let spriteSheet = new createjs.SpriteSheet(data);
-      let button = new createjs.Sprite(spriteSheet);
-      let helper = new createjs.ButtonHelper(button, "normal", "hover", "clicked");
-
-      // the code block in this helper.addEventListener (It works with button.addEventListener)
-      button.onPress = this.handleUpgradeAccel();
-      button.x = 400;
-      button.y = 400;
-      button.gotoAndStop("normal");
-      this.stage.update();
-    }
+    // upgradeStore() {
+    //   this.stage.enableMouseOver();
+    //   let data = {
+    //       images: ["assets/images/UIpack/Spritesheet/blueSheet.png"],
+    //       frames: { width: 100, height: 250},
+    //       animations: { normal: [0], hover: [1], clicked: [2] }
+    //   };
+    //   let spriteSheet = new createjs.SpriteSheet(data);
+    //   let button = new createjs.Sprite(spriteSheet);
+    //   let helper = new createjs.ButtonHelper(button, "normal", "hover", "clicked");
+    //
+    //   // the code block in this helper.addEventListener (It works with button.addEventListener)
+    //   button.onPress = this.handleUpgradeAccel();
+    //   button.x = 400;
+    //   button.y = 400;
+    //   button.gotoAndStop("normal");
+    //   this.stage.update();
+    // }
 
 
       // let layoutWidth = 0.8 * this.stage.canvas.width;
