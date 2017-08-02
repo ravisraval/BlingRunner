@@ -79,7 +79,8 @@ class Game {
         fn.hitBling = false;
         fn.blings[i].y += fn.scrollSpeed;
         if (ndgmr.checkRectCollision(fn.blings[i], fn.userCar)) {
-          // fn.blingCaptureSound(fn.blings[i].graphics.fill.style); //pass in color
+          console.log(fn.blings[i]);
+          fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
           fn.stage.removeChild(fn.blings[i]);
           fn.userScore += 1;
           fn.hitBling = true;
@@ -120,11 +121,11 @@ class Game {
     queue.loadFile({id: "blingCreate", src: "assets/audio/blingSpawn.mp3"})
     createjs.Sound.registerSound("assets/audio/blingSpawn.mp3", "blingCreate");
     createjs.Sound.registerSound(this.levelMusic, "background", 1);
-    createjs.Sound.registerSound(this.levelMusic, "bling1", 1);
-    createjs.Sound.registerSound(this.levelMusic, "bling2", 1);
-    createjs.Sound.registerSound(this.levelMusic, "bling3", 1);
-    createjs.Sound.registerSound(this.levelMusic, "bling4", 1);
-    createjs.Sound.registerSound(this.levelMusic, "bling5", 1);
+    createjs.Sound.registerSound("assets/audio/bling1.mp3", "bling1", 1);
+    createjs.Sound.registerSound("assets/audio/bling2.mp3", "bling2", 1);
+    createjs.Sound.registerSound("assets/audio/bling3.mp3", "bling3", 1);
+    createjs.Sound.registerSound("assets/audio/bling4.mp3", "bling4", 1);
+    createjs.Sound.registerSound("assets/audio/bling5.mp3", "bling5", 1);
     this.xMomentum = 0;
     this.yMomentum = 0;
     this.canvas = document.getElementById("canvas");
@@ -261,23 +262,23 @@ class Game {
   }
 
   blingCaptureSound(color) {
-    // switch(color) {
-    //   case "#f20d09":
-    //     *play sound1*;
-    //     break;
-    //   case "#ffa514":
-    //     *play sound2*;
-    //     break;
-    //   case "#fce516":
-    //     *play sound3*;
-    //     break;
-    //   case "#71ed12":
-    //     *play sound4*;
-    //     break;
-    //   case "#1990ea":
-    //     *play sound5*;
-    //     break;
-    // }
+    switch(color) {
+      case "#f20d09":
+        createjs.Sound.play("bling1", {volume:1});
+        break;
+      case "#ffa514":
+      createjs.Sound.play("bling2", {volume:1});
+        break;
+      case "#fce516":
+      createjs.Sound.play("bling3", {volume:1});
+        break;
+      case "#71ed12":
+      createjs.Sound.play("bling4", {volume:1});
+        break;
+      case "#1990ea":
+      createjs.Sound.play("bling5", {volume:1});
+        break;
+    }
   }
 
   handleLevelOver() {
