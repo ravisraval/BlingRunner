@@ -31,5 +31,5 @@ To display, animate, and add sound to BlingRunner, I will use the CreateJS suite
 
 BlingRunner's core functionality could be improved upon with the following features:
 *  Upgrades available via store after every level
-*
+*  Unlimited mode vs levels
 *
