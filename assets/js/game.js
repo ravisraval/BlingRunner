@@ -15,13 +15,13 @@ class Game {
     // this.renderMenu = this.renderMenu.bind(this);
     this.setup = this.setup.bind(this);
     this.gameInit = this.gameInit.bind(this);
-    this.accel = 1.5;
+    this.accel = 1;
     this.accelLevel = 1;
     this.maxSpeed = 20;
-    this.scrollSpeed = 5;
+    this.scrollSpeed = 4;
     // this.hlines = [];
     this.blings = {};
-    this.blingCountdownStart = 150;
+    this.blingCountdownStart = 250;
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
     this.userScore = 0;
@@ -86,6 +86,11 @@ class Game {
         }
       }
     }
+    document.getElementById('level').innerHTML = `Level: ${this.level}`;
+    document.getElementById('levelBlingsLeft').innerHTML = `Blings Left This Level: : ${this.levelBlingCount - this.blingCount}`;
+    document.getElementById('accel').innerHTML = `Car Acceleration: ${this.accel.toFixed(2)}`;
+    document.getElementById('fallspeed').innerHTML = `Bling Fall Speed: ${this.scrollSpeed}`;
+    document.getElementById('blingAppearRate').innerHTML = `Bling Pop Countdown: ${this.blingCountdown/100}`;
     //FUTURE: modify so user can catch last blings
     if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };
     //set top speed
@@ -292,8 +297,6 @@ class Game {
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     this.paused = true;
     this.stage.clear();
-    console.log(this.userScoreCurrentLevel);
-    console.log(this.levelScoreMin);
     if ( this.userScoreCurrentLevel < this.levelScoreMin ) {
       this.handleGameOver();
     } else {
