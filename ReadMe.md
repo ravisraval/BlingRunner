@@ -24,8 +24,8 @@ To display, animate, and add sound to BlingRunner, I will use the CreateJS suite
 
 *  Day 1: Complete basic project setup, pause function, and car physics.
 *  Day 2: Complete board scrolling, bling generation, and item collision.
-*  Day 3: Complete point system, sounds, start styling and upgrade store if time.
-*  Day 4: Complete styling and upgrade store.
+*  Day 3: Complete point system, sounds, start styling and upgrades.
+*  Day 4: Complete styling and upgrades.
 
 ## Potential Bonus Features
 
