@@ -18,9 +18,9 @@ class Game {
     // this.renderMenu = this.renderMenu.bind(this);
     this.setup = this.setup.bind(this);
     this.gameInit = this.gameInit.bind(this);
-    this.accel = 1.2;
+    this.accel = 1.5;
     this.accelLevel = 1;
-    this.maxSpeed = 10;
+    this.maxSpeed = 20;
     this.scrollSpeed = 5;
     // this.hlines = [];
     this.blings = {};
@@ -79,12 +79,10 @@ class Game {
         fn.hitBling = false;
         fn.blings[i].y += fn.scrollSpeed;
         if (ndgmr.checkRectCollision(fn.blings[i], fn.userCar)) {
-          console.log(fn.blings[i]);
           fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
           fn.stage.removeChild(fn.blings[i]);
           fn.userScore += 1;
           fn.hitBling = true;
-          console.log(fn.userScore);
         }
       }
     }
@@ -97,6 +95,13 @@ class Game {
     if (this.xMomentum >= this.maxSpeed) {
       this.xMomentum = this.maxSpeed;
     }
+    // set negative top speed
+    if (this.yMomentum <= this.maxSpeed * -1) {
+      this.yMomentum = this.maxSpeed * -1;
+    }
+    if (this.xMomentum <= this.maxSpeed * -1) {
+      this.xMomentum = this.maxSpeed * -1;
+    }
     //bounce off top & bottom walls
     if (this.userCar.y > 485) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = 485 };
     if (this.userCar.y < -12) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = -12};
@@ -105,10 +110,10 @@ class Game {
     this.userCar.x += this.xMomentum;
     this.userCar.y += this.yMomentum;
     //slowing friction
-    if (this.yMomentum > 0) { this.yMomentum -= .2};
-    if (this.yMomentum < 0) { this.yMomentum += .2};
-    if (this.xMomentum > 0) { this.xMomentum -= .2};
-    if (this.xMomentum < 0) { this.xMomentum += .2};
+    if (this.yMomentum > 0) { this.yMomentum -= .5};
+    if (this.yMomentum < 0) { this.yMomentum += .5};
+    if (this.xMomentum > 0) { this.xMomentum -= .5};
+    if (this.xMomentum < 0) { this.xMomentum += .5};
     //warp left & right
     if (this.userCar.x > this.stage.canvas.width - 30) { this.userCar.x = -80};
     if (this.userCar.x < -80) { this.userCar.x = this.stage.canvas.width - 30};
@@ -126,8 +131,6 @@ class Game {
     createjs.Sound.registerSound("assets/audio/bling3.mp3", "bling3", 1);
     createjs.Sound.registerSound("assets/audio/bling4.mp3", "bling4", 1);
     createjs.Sound.registerSound("assets/audio/bling5.mp3", "bling5", 1);
-    this.xMomentum = 0;
-    this.yMomentum = 0;
     this.canvas = document.getElementById("canvas");
     this.stage = new createjs.Stage(this.canvas);
     // this.renderMenu();
@@ -135,6 +138,8 @@ class Game {
   }
 
   gameInit() {
+    this.xMomentum = 0;
+    this.yMomentum = 0;
     this.drawVertLines();
     this.userCar = new createjs.Bitmap("assets/images/Topdown_vehicle_sprites_pack/Black_viper.png");
     this.userCar.crossOrigin = "Anonymous";
@@ -246,8 +251,10 @@ class Game {
         this.stage.update();
       } else {
         createjs.Ticker.removeEventListener("tick", this.handleTick);
-        this.pauseText = new createjs.Text("Game Paused", "34px Arial", "#000000");
-        this.pauseText.x = 100;
+        this.pauseText = new createjs.Text("Game Paused", "70px Arial", "#F55555");
+
+        this.pauseText.x = 25;
+        this.pauseText.y = 300;
         this.pauseText.textBaseline = "alphabetic";
         console.log(this.pauseText);
         this.stage.addChild(this.pauseText);
@@ -282,11 +289,11 @@ class Game {
   }
 
   handleLevelOver() {
+    window.removeEventListener("keydown", this.keyHandler);
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     this.paused = true;
     this.stage.clear();
     createjs.Ticker.removeEventListener("tick", this.handleTick);
-    window.removeEventListener("keydown", this.keyHandler);
     if ( this.userScore < this.levelScoreMin ) {
       this.handleGameOver();
     } else {
@@ -375,7 +382,7 @@ class Game {
   // }
     handleUpgradeAccel() {
       if (this.userScoreCurrentLevel > 30 * this.level * 1.2) {
-        this.accel += .3;;
+        this.accel += .3;
         this.accelLevel += 1;
         console.log("accel upgraded yo");
       } else {
