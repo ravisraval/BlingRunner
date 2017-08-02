@@ -32,7 +32,7 @@ class Game {
     this.levelBlingCount = 10;
     this.levelMusic = "assets/audio/background.mp3"
     this.level = 1;
-    this.levelScoreMin = 0;
+    this.levelScoreMin = 40;
   }
 
   handleBlingCollect(bling) {
@@ -82,6 +82,7 @@ class Game {
           fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
           fn.stage.removeChild(fn.blings[i]);
           fn.userScore += 1;
+          fn.accel += .01;
           fn.hitBling = true;
         }
       }
@@ -256,7 +257,6 @@ class Game {
         this.pauseText.x = 25;
         this.pauseText.y = 300;
         this.pauseText.textBaseline = "alphabetic";
-        console.log(this.pauseText);
         this.stage.addChild(this.pauseText);
         this.stage.update();
         this.paused = true;
@@ -274,16 +274,16 @@ class Game {
         createjs.Sound.play("bling1", {volume:1});
         break;
       case "#ffa514":
-      createjs.Sound.play("bling2", {volume:1});
+        createjs.Sound.play("bling2", {volume:1});
         break;
       case "#fce516":
-      createjs.Sound.play("bling3", {volume:1});
+        createjs.Sound.play("bling3", {volume:1});
         break;
       case "#71ed12":
-      createjs.Sound.play("bling4", {volume:1});
+        createjs.Sound.play("bling4", {volume:1});
         break;
       case "#1990ea":
-      createjs.Sound.play("bling5", {volume:1});
+        createjs.Sound.play("bling5", {volume:1});
         break;
     }
   }
@@ -294,25 +294,26 @@ class Game {
     this.paused = true;
     this.stage.clear();
     createjs.Ticker.removeEventListener("tick", this.handleTick);
-    if ( this.userScore < this.levelScoreMin ) {
+    if ( this.userScoreCurrentLevel < this.levelScoreMin ) {
       this.handleGameOver();
     } else {
       let text = new createjs.Text(`Level ${this.level} Complete! \n You have ${this.userScore} points.`, "50px Arial", "#000000");
-      text.x = 40;
+      text.x = 30;
       text.y = 300;
       text.textBaseline = "alphabetic";
       this.stage.addChild(text);
       //level up
       this.level += 1;
-      this.levelBlingCount += 7;
+      this.levelBlingCount += 3;
+      this.blingCountdown += 40;
       this.blingCount = 0;
       this.userScoreCurrentLevel = 0;
-      this.scrollSpeed = Math.floor(this.scrollSpeed * 1.2);
+      this.scrollSpeed = Math.floor(this.scrollSpeed * 1.3);
       console.log(`level: ${this.level}`);
       console.log(`bling Count: ${this.levelBlingCount}`);
       console.log(`scroll speed: ${this.scrollSpeed}`);
 
-      let continueText = new createjs.Text("Press any key to continue.", "20px Arial", "#000000");
+      let continueText = new createjs.Text("Press space to continue.", "20px Arial", "#000000");
       continueText.x = 150;
       continueText.y = 450;
       text.textBaseline = "alphabetic";
