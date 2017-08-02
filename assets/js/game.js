@@ -30,6 +30,7 @@ class Game {
     this.levelBlingCount = 10;
     this.levelMusic = "assets/audio/background.mp3"
     this.level = 1;
+    this.friction = .5;
     this.levelScoreMin = 20;
   }
 
@@ -91,6 +92,7 @@ class Game {
     document.getElementById('accel').innerHTML = `Car Acceleration: ${this.accel.toFixed(2)}`;
     document.getElementById('fallspeed').innerHTML = `Bling Fall Speed: ${this.scrollSpeed}`;
     document.getElementById('blingAppearRate').innerHTML = `Bling Pop Countdown: ${this.blingCountdown/100}`;
+    document.getElementById('friction').innerHTML = `Friction: ${(this.friction / .5) * 100}%`;
     //FUTURE: modify so user can catch last blings
     if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };
     //set top speed
@@ -115,10 +117,10 @@ class Game {
     this.userCar.x += this.xMomentum;
     this.userCar.y += this.yMomentum;
     //slowing friction
-    if (this.yMomentum > 0) { this.yMomentum -= .5};
-    if (this.yMomentum < 0) { this.yMomentum += .5};
-    if (this.xMomentum > 0) { this.xMomentum -= .5};
-    if (this.xMomentum < 0) { this.xMomentum += .5};
+    if (this.yMomentum > 0) { this.yMomentum -= this.friction};
+    if (this.yMomentum < 0) { this.yMomentum += this.friction};
+    if (this.xMomentum > 0) { this.xMomentum -= this.friction};
+    if (this.xMomentum < 0) { this.xMomentum += this.friction};
     //warp left & right
     if (this.userCar.x > this.stage.canvas.width - 30) { this.userCar.x = -80};
     if (this.userCar.x < -80) { this.userCar.x = this.stage.canvas.width - 30};
@@ -350,6 +352,22 @@ class Game {
     resetText.y = 450;
     text.textBaseline = "alphabetic";
     this.stage.addChild(resetText);
+    this.accel = 1;
+    this.accelLevel = 1;
+    this.maxSpeed = 20;
+    this.scrollSpeed = 4;
+    this.blings = {};
+    this.blingCountdownStart = 250;
+    this.blingCountdown = this.blingCountdownStart;
+    this.blingCount = 0;
+    this.userScore = 0;
+    this.userScoreCurrentLevel = 0;
+    this.hitBling = false;
+    this.levelBlingCount = 10;
+    this.levelMusic = "assets/audio/background.mp3"
+    this.level = 1;
+    this.friction = .5;
+    this.levelScoreMin = 20;
     window.addEventListener("keydown", this.waitForSpacebar);
   }
 
