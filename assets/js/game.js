@@ -25,11 +25,12 @@ class Game {
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
     this.userScore = 0;
+    this.userScoreCurrentLevel = 0;
     this.hitBling = false;
     this.levelBlingCount = 10;
     this.levelMusic = "assets/audio/background.mp3"
     this.level = 1;
-    this.levelScoreMin = 40;
+    this.levelScoreMin = 20;
   }
 
   handleBlingCollect(bling) {
@@ -79,6 +80,7 @@ class Game {
           fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
           fn.stage.removeChild(fn.blings[i]);
           fn.userScore += 1;
+          fn.userScoreCurrentLevel += 1;
           fn.accel += .01;
           fn.hitBling = true;
         }
@@ -290,6 +292,8 @@ class Game {
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     this.paused = true;
     this.stage.clear();
+    console.log(this.userScoreCurrentLevel);
+    console.log(this.levelScoreMin);
     if ( this.userScoreCurrentLevel < this.levelScoreMin ) {
       this.handleGameOver();
     } else {

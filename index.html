@@ -4,11 +4,24 @@
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script src="assets/js/ndgmr.Collision.js"></script>
     <script src="assets/js/game.js"></script>
-    <script rel="stylesheet" type='text/css' href="assets/stylesheets/game.css"></script>
+    <link rel="stylesheet" type='text/css' href="assets/stylesheets/game.css"/>
     <meta charset="utf-8">
     <title>Bling Runner</title>
   </head>
   <body onload="init()">
-    <canvas id="canvas" width="500" height="600" style="border: 10px solid black; margin-top: 100px; margin-left: 25%"></canvas>
+    <div class="game-container">
+      <div class="instructions">
+        <h2>Instructions</h2>
+        <h3>TL;DR: Catch the blings!</h3>
+        <p>To advance levels, you must grab enough blings. If you don't, game over! How many blings, you may ask? As many as you can!
+      </div>
+      <div class="stats">
+        <p id="stats"></p>
+      </div>
+      <canvas id="canvas" width="500" height="600" style="border: 10px solid black; margin-top: 100px; margin-left: 380px"></canvas>
+
+      <div>
+      </div>
+    </div>
   </body>
 </html>

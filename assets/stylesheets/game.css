@@ -1,0 +1,11 @@
+html {
+  height: 100%;
+
+}
+
+.game-container {
+  border: 2px solid grey;
+  width: 900px;
+  height:720px;
+
+}
