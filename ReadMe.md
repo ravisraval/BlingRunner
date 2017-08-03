@@ -30,9 +30,12 @@ To display, animate, and add sound to BlingRunner, I will use the CreateJS suite
 ## Potential Bonus Features
 
 BlingRunner's core functionality could be improved upon with the following features:
+*  Bombs!!!!!!
 *  Upgrades available via store after every level
 *  Unlimited mode vs levels
 *  start button
 *  friction modifier
 *  fix collision????????????????????
 *  end level when all blings are out of canvas
+*  Make a legit timed countdown from # blings left x bling pop countdown
+*  startup music &

@@ -7,9 +7,13 @@ html {
 .instructions {
 width:400px;
 }
+h5{
+  margin:10px;
+}
 
 .game-container {
   display: flex;
+  justify-content: center;
   border: 2px solid grey;
   width: 900px;
   height:620px;
@@ -18,4 +22,7 @@ width:400px;
 
 ul {
   list-style: none;
+  display:flex;
+  flex-flow: column;
+  align-items: center;
 }

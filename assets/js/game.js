@@ -1,4 +1,5 @@
 function init() {
+
   game = new Game();
   game.setup();
 }
@@ -12,8 +13,11 @@ class Game {
     this.handleBlingCollect = this.handleBlingCollect.bind(this);
     this.handleLevelOver = this.handleLevelOver.bind(this);
     this.handleGameOver = this.handleGameOver.bind(this);
+    this.waitForEnter = this.waitForEnter.bind(this);
+    this.waitForStart = this.waitForStart.bind(this);
     // this.renderMenu = this.renderMenu.bind(this);
     this.setup = this.setup.bind(this);
+    this.setup2 = this.setup2.bind(this);
     this.gameInit = this.gameInit.bind(this);
     this.accel = 1;
     this.accelLevel = 1;
@@ -32,100 +36,13 @@ class Game {
     this.level = 1;
     this.friction = .5;
     this.levelScoreMin = 35;
+    window.addEventListener("keydown", event => {
+      if (event.key === "m") {this.toggleSound();}
+    });
   }
 
-  handleBlingCollect(bling) {
-    this.userScore += 1;
-    this.stage.removeChild(bling);
-  }
-
-  handleTick(event) {
-    this.blingCountdown -= 10;
-    if (this.blingCountdown === 0) {
-      createjs.Sound.play("background", {volume:.7});
-      this.blingCountdown = this.blingCountdownStart;
-      this.spot = Math.floor(Math.random(5) * 5);
-      let x = 100 * this.spot + 18;
-      let color = "";
-      switch (this.spot) {
-        case 0:
-          color = "#f20d09";
-          break;
-        case 1:
-          color = "#ffa514";
-          break;
-        case 2:
-          color = "#fce516";
-          break;
-        case 3:
-          color = "#71ed12";
-          break;
-        case 4:
-          color = "#1990ea";
-          break;
-      }
-      let graphics = new createjs.Graphics().beginFill(color).drawRect(0, 0, 64, 64);
-      this.blings[this.blingCount] = new createjs.Shape(graphics);
-      this.blings[this.blingCount].crossOrigin = "Anonymous";
-      this.blings[this.blingCount].x = 100 * this.spot + 18;
-      this.stage.addChild(this.blings[this.blingCount]);
-      this.blingCount += 1;
-      createjs.Sound.play("blingCreate", {volume:.25});
-    }
-    if (this.blingCount > 0) {
-      let fn = this;
-      for(let i = 0; i < this.blingCount; i++) {
-        fn.hitBling = false;
-        fn.blings[i].y += fn.scrollSpeed;
-        if (ndgmr.checkRectCollision(fn.blings[i], fn.userCar)) {
-          fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
-          fn.stage.removeChild(fn.blings[i]);
-          fn.userScore += 1;
-          fn.userScoreCurrentLevel += 1;
-          fn.accel += .01;
-          fn.hitBling = true;
-        }
-      }
-    }
-    document.getElementById('level').innerHTML = `Level: ${this.level}`;
-    document.getElementById('levelBlingsLeft').innerHTML = `Blings Left This Level: : ${this.levelBlingCount - this.blingCount}`;
-    document.getElementById('accel').innerHTML = `Car Acceleration: ${this.accel.toFixed(2)}`;
-    document.getElementById('fallspeed').innerHTML = `Bling Fall Speed: ${this.scrollSpeed}`;
-    document.getElementById('blingAppearRate').innerHTML = `Bling Pop Countdown: ${this.blingCountdown/100}`;
-    document.getElementById('friction').innerHTML = `Friction: ${(this.friction / .5) * 100}%`;
-    //FUTURE: modify so user can catch last blings
-    if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };
-    //set top speed
-    if (this.yMomentum >= this.maxSpeed) {
-      this.yMomentum = this.maxSpeed;
-    }
-    if (this.xMomentum >= this.maxSpeed) {
-      this.xMomentum = this.maxSpeed;
-    }
-    // set negative top speed
-    if (this.yMomentum <= this.maxSpeed * -1) {
-      this.yMomentum = this.maxSpeed * -1;
-    }
-    if (this.xMomentum <= this.maxSpeed * -1) {
-      this.xMomentum = this.maxSpeed * -1;
-    }
-    //bounce off top & bottom walls
-    if (this.userCar.y > 485) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = 485 };
-    if (this.userCar.y < -12) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = -12};
-
-    this.userCar.skewX = this.xMomentum / 3;
-    this.userCar.x += this.xMomentum;
-    this.userCar.y += this.yMomentum;
-    //slowing friction
-    if (this.yMomentum > 0) { this.yMomentum -= this.friction};
-    if (this.yMomentum < 0) { this.yMomentum += this.friction};
-    if (this.xMomentum > 0) { this.xMomentum -= this.friction};
-    if (this.xMomentum < 0) { this.xMomentum += this.friction};
-    //warp left & right
-    if (this.userCar.x > this.stage.canvas.width - 30) { this.userCar.x = -80};
-    if (this.userCar.x < -80) { this.userCar.x = this.stage.canvas.width - 30};
-
-    this.stage.update();
+  toggleSound() {
+    createjs.Sound.muted = !createjs.Sound.muted;
   }
 
   setup() {
@@ -140,8 +57,52 @@ class Game {
     createjs.Sound.registerSound("assets/audio/bling5.mp3", "bling5", 1);
     this.canvas = document.getElementById("canvas");
     this.stage = new createjs.Stage(this.canvas);
-    // this.renderMenu();
-    this.gameInit();
+    let overText = new createjs.Text("BLING RUNNER", "62px Arial", "#000000");
+    overText.x = 15;
+    overText.y = 260;
+    overText.textBaseline = "alphabetic";
+    this.stage.addChild(overText);
+    let text = new createjs.Text("Press enter to begin your run!", "30px Arial", "#000000");
+    text.x = 50;
+    text.y = 500;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(text);
+    this.stage.update();
+    window.addEventListener("keydown", this.waitForEnter);
+  }
+
+  setup2(){
+    let blingText = new createjs.Text("Go Get Some Bling!", "56px Arial", "#000000");
+    blingText.x = 10;
+    blingText.y = 260;
+    blingText.textBaseline = "alphabetic";
+    this.stage.addChild(blingText);
+    let arrowText = new createjs.Text("Use The Arrow Keys To Move.\n     Press Enter Again To Start", "30px Arial", "#000000");
+    arrowText.x = 55;
+    arrowText.y = 500;
+    arrowText.textBaseline = "alphabetic";
+    this.stage.addChild(arrowText);
+    this.stage.update();
+    window.addEventListener("keydown", this.waitForStart);
+  }
+
+  waitForEnter(event) {
+    if (event.key === "Enter") {
+      this.stage.removeAllChildren();
+      this.stage.clear();
+      this.stage.update();
+      this.setup2();
+      window.removeEventListener("keydown", this.waitForEnter);
+    }
+  }
+  waitForStart(event) {
+    if (event.key === "Enter") {
+      this.stage.removeAllChildren();
+      this.stage.clear();
+      this.stage.update();
+      this.gameInit();
+      window.removeEventListener("keydown", this.waitForStart);
+    }
   }
 
   gameInit() {
@@ -152,7 +113,7 @@ class Game {
     this.userCar.crossOrigin = "Anonymous";
     this.userCar.setTransform(190,480,.5,.5);
     createjs.Ticker.addEventListener("tick", this.handleTick);
-    this.stage.addChild(this.userCar, this.pauseText);
+    this.stage.addChild(this.userCar);
     this.stage.update();
     this.paused = false;
     this.handleKeyPress();
@@ -237,6 +198,100 @@ class Game {
     this.vline4.graphics.endStroke();
   }
 
+  handleBlingCollect(bling) {
+    this.userScore += 1;
+    this.stage.removeChild(bling);
+  }
+
+  handleTick(event) {
+    this.blingCountdown -= 10;
+    if (this.blingCountdown === 0) {
+      createjs.Sound.play("background", {volume:.7});
+      this.blingCountdown = this.blingCountdownStart;
+      this.spot = Math.floor(Math.random(5) * 5);
+      let x = 100 * this.spot + 18;
+      let color = "";
+      switch (this.spot) {
+        case 0:
+        color = "#f20d09";
+        break;
+        case 1:
+        color = "#ffa514";
+        break;
+        case 2:
+        color = "#fce516";
+        break;
+        case 3:
+        color = "#71ed12";
+        break;
+        case 4:
+        color = "#1990ea";
+        break;
+      }
+      let graphics = new createjs.Graphics().beginFill(color).drawRect(0, 0, 64, 64);
+      this.blings[this.blingCount] = new createjs.Shape(graphics);
+      this.blings[this.blingCount].crossOrigin = "Anonymous";
+      this.blings[this.blingCount].x = 100 * this.spot + 18;
+      this.stage.addChild(this.blings[this.blingCount]);
+      this.blingCount += 1;
+      createjs.Sound.play("blingCreate", {volume:.25});
+    }
+    if (this.blingCount > 0) {
+      let fn = this;
+      for(let i = 0; i < this.blingCount; i++) {
+        fn.hitBling = false;
+        fn.blings[i].y += fn.scrollSpeed;
+        if (ndgmr.checkRectCollision(fn.blings[i], fn.userCar)) {
+          fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
+          fn.stage.removeChild(fn.blings[i]);
+          fn.userScore += 1;
+          fn.userScoreCurrentLevel += 1;
+          fn.accel += .01;
+          fn.hitBling = true;
+        }
+      }
+    }
+    document.getElementById('level').innerHTML = `Level: ${this.level}`;
+    document.getElementById('levelBlingsLeft').innerHTML = `Blings Left This Level: : ${this.levelBlingCount - this.blingCount}`;
+    document.getElementById('accel').innerHTML = `Car Acceleration: ${this.accel.toFixed(2)}`;
+    document.getElementById('fallspeed').innerHTML = `Bling Fall Speed: ${this.scrollSpeed}`;
+    document.getElementById('blingAppearRate').innerHTML = `Bling Pop Countdown: ${this.blingCountdown/100}`;
+    document.getElementById('friction').innerHTML = `Friction: ${(this.friction / .5) * 100}%`;
+    //FUTURE: modify so user can catch last blings
+    if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };
+    //set top speed
+    if (this.yMomentum >= this.maxSpeed) {
+      this.yMomentum = this.maxSpeed;
+    }
+    if (this.xMomentum >= this.maxSpeed) {
+      this.xMomentum = this.maxSpeed;
+    }
+    // set negative top speed
+    if (this.yMomentum <= this.maxSpeed * -1) {
+      this.yMomentum = this.maxSpeed * -1;
+    }
+    if (this.xMomentum <= this.maxSpeed * -1) {
+      this.xMomentum = this.maxSpeed * -1;
+    }
+    //bounce off top & bottom walls
+    if (this.userCar.y > 485) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = 485 };
+    if (this.userCar.y < -12) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = -12};
+
+    this.userCar.skewX = this.xMomentum / 3;
+    this.userCar.x += this.xMomentum;
+    this.userCar.y += this.yMomentum;
+    //slowing friction
+    if (this.yMomentum > 0) { this.yMomentum -= this.friction};
+    if (this.yMomentum < 0) { this.yMomentum += this.friction};
+    if (this.xMomentum > 0) { this.xMomentum -= this.friction};
+    if (this.xMomentum < 0) { this.xMomentum += this.friction};
+    //warp left & right
+    if (this.userCar.x > this.stage.canvas.width - 30) { this.userCar.x = -80};
+    if (this.userCar.x < -80) { this.userCar.x = this.stage.canvas.width - 30};
+
+    this.stage.update();
+  }
+
   keyHandler(event) {
     if (event.key === "ArrowRight") {
       this.xMomentum += this.accel;
@@ -253,13 +308,14 @@ class Game {
     if (event.key === " " || event.key === "Escape") {
       if (this.paused) {
         createjs.Ticker.addEventListener("tick", this.handleTick);
+        this.toggleSound();
         this.paused = false;
         this.stage.removeChild(this.pauseText);
         this.stage.update();
       } else {
         createjs.Ticker.removeEventListener("tick", this.handleTick);
         this.pauseText = new createjs.Text("Game Paused", "70px Arial", "#F55555");
-
+        this.toggleSound();
         this.pauseText.x = 25;
         this.pauseText.y = 300;
         this.pauseText.textBaseline = "alphabetic";
@@ -309,7 +365,7 @@ class Game {
       this.stage.addChild(text);
       //level up
       this.level += 1;
-      this.levelBlingCount += 3;
+      this.levelBlingCount += 1;
       this.blingCountdown += 40;
       this.blingCount = 0;
       this.userScoreCurrentLevel = 0;
