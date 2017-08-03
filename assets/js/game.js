@@ -22,6 +22,8 @@ class Game {
     this.accel = 1;
     this.accelLevel = 1;
     this.maxSpeed = 20;
+    this.bombChance = 10; //higher is less likely
+    this.bomb = false;
     this.scrollSpeed = 4;
     // this.hlines = [];
     this.blings = {};
@@ -36,6 +38,7 @@ class Game {
     this.level = 1;
     this.friction = .5;
     this.levelScoreMin = 35;
+    //mute
     window.addEventListener("keydown", event => {
       if (event.key === "m") {this.toggleSound();}
     });
@@ -46,6 +49,7 @@ class Game {
   }
 
   setup() {
+    //load audio
     let queue = new createjs.LoadQueue(false);
     queue.loadFile({id: "blingCreate", src: "assets/audio/blingSpawn.mp3"})
     createjs.Sound.registerSound("assets/audio/blingSpawn.mp3", "blingCreate");
@@ -55,16 +59,18 @@ class Game {
     createjs.Sound.registerSound("assets/audio/bling3.mp3", "bling3", 1);
     createjs.Sound.registerSound("assets/audio/bling4.mp3", "bling4", 1);
     createjs.Sound.registerSound("assets/audio/bling5.mp3", "bling5", 1);
+    //create stage
     this.canvas = document.getElementById("canvas");
     this.stage = new createjs.Stage(this.canvas);
+    //titles
     let overText = new createjs.Text("BLING RUNNER", "62px Arial", "#000000");
     overText.x = 15;
     overText.y = 260;
     overText.textBaseline = "alphabetic";
     this.stage.addChild(overText);
-    let text = new createjs.Text("Press enter to begin your run!", "30px Arial", "#000000");
-    text.x = 50;
-    text.y = 500;
+    let text = new createjs.Text("Press enter to continue!", "30px Arial", "#000000");
+    text.x = 100;
+    text.y = 420;
     text.textBaseline = "alphabetic";
     this.stage.addChild(text);
     this.stage.update();
@@ -72,14 +78,14 @@ class Game {
   }
 
   setup2(){
-    let blingText = new createjs.Text("Go Get Some Bling!", "56px Arial", "#000000");
-    blingText.x = 10;
+    let blingText = new createjs.Text("Catch Some Bling!", "56px Arial", "#000000");
+    blingText.x = 15;
     blingText.y = 260;
     blingText.textBaseline = "alphabetic";
     this.stage.addChild(blingText);
-    let arrowText = new createjs.Text("Use The Arrow Keys To Move.\n     Press Enter Again To Start", "30px Arial", "#000000");
+    let arrowText = new createjs.Text("Use The Arrow Keys To Move.\n\n\n   Press Enter Again To Start", "30px Arial", "#000000");
     arrowText.x = 55;
-    arrowText.y = 500;
+    arrowText.y = 420;
     arrowText.textBaseline = "alphabetic";
     this.stage.addChild(arrowText);
     this.stage.update();
@@ -209,25 +215,33 @@ class Game {
       createjs.Sound.play("background", {volume:.7});
       this.blingCountdown = this.blingCountdownStart;
       this.spot = Math.floor(Math.random(5) * 5);
+      if (Math.floor(Math.random(this.bombChance) * this.bombChance) === 1) {this.bomb = true};
+
       let x = 100 * this.spot + 18;
       let color = "";
       switch (this.spot) {
         case 0:
-        color = "#f20d09";
-        break;
+          color = "#f20d09";
+          break;
         case 1:
-        color = "#ffa514";
-        break;
+          color = "#ffa514";
+          break;
         case 2:
-        color = "#fce516";
-        break;
+          color = "#fce516";
+          break;
         case 3:
-        color = "#71ed12";
-        break;
+          color = "#71ed12";
+          break;
         case 4:
-        color = "#1990ea";
-        break;
+          color = "#1990ea";
+          break;
       }
+      if (this.bomb) {
+        color = "#000000";
+        console.log("bomb inc");
+      }
+      this.bomb = false;
+      console.log(color);
       let graphics = new createjs.Graphics().beginFill(color).drawRect(0, 0, 64, 64);
       this.blings[this.blingCount] = new createjs.Shape(graphics);
       this.blings[this.blingCount].crossOrigin = "Anonymous";
@@ -347,6 +361,10 @@ class Game {
       case "#1990ea":
         createjs.Sound.play("bling5", {volume:1});
         break;
+      case "#000000":
+        this.handleDeadlyBomb();
+        // createjs.Sound.play("bling5", {volume:1}); get a blow up noise
+        break;
     }
   }
 
@@ -394,6 +412,46 @@ class Game {
   handleGameOver() {
     let text = new createjs.Text("You didn't grab enough blings!", "30px Arial", "#000000");
     text.x = 50;
+    text.y = 200;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(text);
+    let overText = new createjs.Text("GAME OVER", "80px Arial", "#000000");
+    overText.x = 10;
+    overText.y = 260;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(overText);
+
+    let resetText = new createjs.Text("Press space to play again.", "20px Arial", "#000000");
+    resetText.x = 120;
+    resetText.y = 450;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(resetText);
+    this.accel = 1;
+    this.accelLevel = 1;
+    this.maxSpeed = 20;
+    this.scrollSpeed = 4;
+    this.blings = {};
+    this.blingCountdownStart = 250;
+    this.blingCountdown = this.blingCountdownStart;
+    this.blingCount = 0;
+    this.userScore = 0;
+    this.userScoreCurrentLevel = 0;
+    this.hitBling = false;
+    this.levelBlingCount = 10;
+    this.levelMusic = "assets/audio/background.mp3"
+    this.level = 1;
+    this.friction = .5;
+    this.levelScoreMin = 20;
+    window.addEventListener("keydown", this.waitForSpacebar);
+  }
+
+  handleDeadlyBomb() {
+    window.removeEventListener("keydown", this.keyHandler);
+    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    this.paused = true;
+    this.stage.clear();
+    let text = new createjs.Text("You grabbed a bomb!", "30px Arial", "#000000");
+    text.x = 107;
     text.y = 200;
     text.textBaseline = "alphabetic";
     this.stage.addChild(text);

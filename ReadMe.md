@@ -39,3 +39,7 @@ BlingRunner's core functionality could be improved upon with the following featu
 *  end level when all blings are out of canvas
 *  Make a legit timed countdown from # blings left x bling pop countdown
 *  startup music &
+*  Add striped roads - have them speed up and slow down with the speed of the objects
+*  Bombs or Buffs can do different things - some slow you down, some speed you up, some make your car more responsive, friction, acceleration, top speed, some cause game over.
+*  Ability to charge (fast acceleration) to destroy impediments (orange barrels?)
+*  Checkered Finish lines at the end of a level.
