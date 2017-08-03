@@ -8,6 +8,7 @@ class Game {
     this.blingCaptureSound = this.blingCaptureSound.bind(this);
     this.handleTick = this.handleTick.bind(this);
     this.handleFreezeBomb = this.handleFreezeBomb.bind(this);
+    this.handleBuff = this.handleBuff.bind(this);
     this.keyHandler = this.keyHandler.bind(this);
     this.waitForSpacebar = this.waitForSpacebar.bind(this);
     this.handleBlingCollect = this.handleBlingCollect.bind(this);
@@ -22,11 +23,15 @@ class Game {
     this.accel = 1;
     this.accelLevel = 1;
     this.maxSpeed = 20;
+    this.buffChance = 3; //higher is less likely
+    // this.perfectBrakes = true;
+    this.buff = false;
     this.deadlyBombChance = 10; //higher is less likely
     this.deadlyBomb = false;
     this.freezeBombChance = 5; //higher is less likely
     this.freezeBomb = false;
     this.freezeBombDuration = 3; //seconds
+    this.buffDuration = 3; //seconds
     this.scrollSpeed = 4;
     // this.hlines = [];
     this.blings = {};
@@ -34,7 +39,7 @@ class Game {
     this.blingCountdown = this.blingCountdownStart;
     this.blingCount = 0;
     this.userScore = 0;
-    this.userScoreCurrentLevel = 0;
+    this.userScoreCurrentLevel   = 0;
     this.hitBling = false;
     this.levelBlingCount = 10;
     this.levelMusic = "assets/audio/background.mp3"
@@ -221,6 +226,7 @@ class Game {
       //bombs & bufffs
       if (Math.floor(Math.random(this.deadlyBombChance) * this.deadlyBombChance) === 1) {this.deadlyBomb = true};
       if (Math.floor(Math.random(this.freezeBombChance) * this.freezeBombChance) === 1) {this.freezeBomb = true};
+      if (Math.floor(Math.random(this.buffChance) * this.buffChance) === 1) {this.buff = true};
 
       let x = 100 * this.spot + 18;
       let color = "";
@@ -251,8 +257,13 @@ class Game {
       //reset bomb state after assigning color
       this.freezeBomb = false;
       this.deadlyBomb = false;
-
       let graphics = new createjs.Graphics().beginFill(color).drawRect(0, 0, 64, 64);
+      if (this.buff) {
+        graphics = new createjs.Graphics()
+                .beginLinearGradientFill(["#000000","#b431af"], [0, 1], 0, 0, 64, 64)
+                .drawRect(0,0,64,64);
+        this.buff = false;
+      }
       this.blings[this.blingCount] = new createjs.Shape(graphics);
       this.blings[this.blingCount].crossOrigin = "Anonymous";
       this.blings[this.blingCount].x = 100 * this.spot + 18;
@@ -318,15 +329,27 @@ class Game {
 
   keyHandler(event) {
     if (event.key === "ArrowRight") {
+      // if (this.perfectBrakes) {
+      //   if (this.xMomentum < 0) {this.xMomentum = this.accel}
+      // }
       this.xMomentum += this.accel;
     }
     if (event.key === "ArrowLeft") {
+      // if (this.perfectBrakes) {
+      //   if (this.xMomentum > 0) {this.xMomentum = -this.accel}
+      // }
       this.xMomentum -= this.accel;
     }
     if (event.key === "ArrowUp") {
+      // if (this.perfectBrakes) {
+      //   if (this.yMomentum > 0) {this.yMomentum = -this.accel}
+      // }
       this.yMomentum -= this.accel;
     }
     if (event.key === "ArrowDown") {
+      // if (this.perfectBrakes) {
+      //   if (this.yMomentum < 0) {this.yMomentum = this.accel}
+      // }
       this.yMomentum += this.accel;
     }
     if (event.key === " " || event.key === "Escape") {
@@ -378,6 +401,12 @@ class Game {
       case "#565351":
         this.handleFreezeBomb();
         // createjs.Sound.play("bling5", {volume:1}); get a blow up noise
+        break;
+        //if you want to add more buffs with gradients, make a parent switch
+        //function that switches on typeof color. If it's a string (regular
+        // fill), send to a string switch, otherwise, send to an object switch.
+      default:
+        this.handleBuff();
         break;
     }
   }
@@ -476,6 +505,11 @@ class Game {
        window.addEventListener("keydown", this.keyHandler);
      }, this.freezeBombDuration * 1000);
 
+  }
+
+  handleBuff() {
+    this.accel += .3;
+    setTimeout(() => { this.accel -= .3 }, this.buffDuration * 1000);
   }
 
   handleDeadlyBomb() {
