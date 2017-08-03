@@ -1,5 +1,4 @@
 function init() {
-
   game = new Game();
   game.setup();
 }
@@ -8,6 +7,7 @@ class Game {
   constructor() {
     this.blingCaptureSound = this.blingCaptureSound.bind(this);
     this.handleTick = this.handleTick.bind(this);
+    this.handleFreezeBomb = this.handleFreezeBomb.bind(this);
     this.keyHandler = this.keyHandler.bind(this);
     this.waitForSpacebar = this.waitForSpacebar.bind(this);
     this.handleBlingCollect = this.handleBlingCollect.bind(this);
@@ -22,8 +22,11 @@ class Game {
     this.accel = 1;
     this.accelLevel = 1;
     this.maxSpeed = 20;
-    this.bombChance = 10; //higher is less likely
-    this.bomb = false;
+    this.deadlyBombChance = 10; //higher is less likely
+    this.deadlyBomb = false;
+    this.freezeBombChance = 5; //higher is less likely
+    this.freezeBomb = false;
+    this.freezeBombDuration = 3; //seconds
     this.scrollSpeed = 4;
     // this.hlines = [];
     this.blings = {};
@@ -215,7 +218,9 @@ class Game {
       createjs.Sound.play("background", {volume:.7});
       this.blingCountdown = this.blingCountdownStart;
       this.spot = Math.floor(Math.random(5) * 5);
-      if (Math.floor(Math.random(this.bombChance) * this.bombChance) === 1) {this.bomb = true};
+      //bombs & bufffs
+      if (Math.floor(Math.random(this.deadlyBombChance) * this.deadlyBombChance) === 1) {this.deadlyBomb = true};
+      if (Math.floor(Math.random(this.freezeBombChance) * this.freezeBombChance) === 1) {this.freezeBomb = true};
 
       let x = 100 * this.spot + 18;
       let color = "";
@@ -236,12 +241,17 @@ class Game {
           color = "#1990ea";
           break;
       }
-      if (this.bomb) {
+      //order matters here if multiple bomb states are true
+      if (this.deadlyBomb) {
         color = "#000000";
-        console.log("bomb inc");
       }
-      this.bomb = false;
-      console.log(color);
+      if (this.freezeBomb) {
+        color = "#565351";
+      }
+      //reset bomb state after assigning color
+      this.freezeBomb = false;
+      this.deadlyBomb = false;
+
       let graphics = new createjs.Graphics().beginFill(color).drawRect(0, 0, 64, 64);
       this.blings[this.blingCount] = new createjs.Shape(graphics);
       this.blings[this.blingCount].crossOrigin = "Anonymous";
@@ -290,7 +300,7 @@ class Game {
     //bounce off top & bottom walls
     if (this.userCar.y > 485) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = 485 };
     if (this.userCar.y < -12) { this.yMomentum = this.yMomentum * -.4; this.userCar.y = -12};
-
+    //rotate car with lateral movement
     this.userCar.skewX = this.xMomentum / 3;
     this.userCar.x += this.xMomentum;
     this.userCar.y += this.yMomentum;
@@ -365,8 +375,13 @@ class Game {
         this.handleDeadlyBomb();
         // createjs.Sound.play("bling5", {volume:1}); get a blow up noise
         break;
+      case "#565351":
+        this.handleFreezeBomb();
+        // createjs.Sound.play("bling5", {volume:1}); get a blow up noise
+        break;
     }
   }
+
 
   handleLevelOver() {
     window.removeEventListener("keydown", this.keyHandler);
@@ -445,6 +460,24 @@ class Game {
     window.addEventListener("keydown", this.waitForSpacebar);
   }
 
+  handleFreezeBomb() {
+    window.removeEventListener("keydown", this.keyHandler);
+    let text = new createjs.Text(`SLEEPING GAS!`, "62px Arial", "#000000");
+    let text2 = new createjs.Text(`You fall asleep at the wheel for ${this.freezeBombDuration} seconds!`, "26px Arial", "#000000");
+    text.x = 17;
+    text.y = 70;
+    text2.x = 10;
+    text2.y = 150;
+    text.textBaseline = "alphabetic";
+    this.stage.addChild(text, text2);
+    setTimeout(() => {
+       this.stage.removeChild(text, text2);
+       this.stage.update();
+       window.addEventListener("keydown", this.keyHandler);
+     }, this.freezeBombDuration * 1000);
+
+  }
+
   handleDeadlyBomb() {
     window.removeEventListener("keydown", this.keyHandler);
     createjs.Ticker.removeEventListener("tick", this.handleTick);
@@ -484,92 +517,4 @@ class Game {
     this.levelScoreMin = 20;
     window.addEventListener("keydown", this.waitForSpacebar);
   }
-
-  // renderMenu() {
-  //   let startB = new Image();
-  //   // startB.crossOrigin="Anonymous";
-  //   startB.src = "assets/images/UIpack/PNG/green_button00.png";
-  //   let startButton = new createjs.Bitmap(startB);
-  //   startButton.addEventListener("click", event => {
-  //     startButton.removeEventListener("click", arguments.callee);
-  //     this.stage.removeAllChildren();
-  //     this.stage.update();
-  //     this.gameInit();
-  //   });
-  //   let optionsButton;
-  //   let creditsButton;
-  // }
-    // handleUpgradeAccel() {
-    //   if (this.userScoreCurrentLevel > 30 * this.level * 1.2) {
-    //     this.accel += .3;
-    //     this.accelLevel += 1;
-    //     console.log("accel upgraded yo");
-    //   } else {
-    //     console.log("not enough creds, sory");
-    //   }
-    // }
-
-    // upgradeStore() {
-    //   this.stage.enableMouseOver();
-    //   let data = {
-    //       images: ["assets/images/UIpack/Spritesheet/blueSheet.png"],
-    //       frames: { width: 100, height: 250},
-    //       animations: { normal: [0], hover: [1], clicked: [2] }
-    //   };
-    //   let spriteSheet = new createjs.SpriteSheet(data);
-    //   let button = new createjs.Sprite(spriteSheet);
-    //   let helper = new createjs.ButtonHelper(button, "normal", "hover", "clicked");
-    //
-    //   // the code block in this helper.addEventListener (It works with button.addEventListener)
-    //   button.onPress = this.handleUpgradeAccel();
-    //   button.x = 400;
-    //   button.y = 400;
-    //   button.gotoAndStop("normal");
-    //   this.stage.update();
-    // }
-
-
-      // let layoutWidth = 0.8 * this.stage.canvas.width;
-      // let layoutHeight = 0.6 * this.stage.canvas.height;
-      // let layoutRect = new createjs.Shape();
-      // let buttonWidth = layoutWidth/2;
-      // let buttonHeight = 0.10 * layoutHeight;
-      //                     layoutRect.graphics.beginStroke("black").drawRect((this.stage.canvas.width - layoutWidth) / 2, (this.stage.canvas.height - layoutHeight) / 2, layoutWidth, layoutHeight);
-      //
-      // let text = new createjs.Text();
-      // text.set({
-      //   text: `Car Acceleration : ${this.accelLevel}/5`,
-      //   textAlign: "center",
-      //   textBaseline: "middle",
-      //   x: buttonWidth / 2,
-      //   y: buttonHeight / 2
-      // });
-      //
-      // let button1 = new createjs.Container();
-      // let bg1 = new createjs.Shape();
-      // bg1.graphics.beginStroke("black").drawRect(0, 0, buttonWidth, buttonHeight);
-      // button1.set({
-      // 	x: (this.stage.canvas.width - layoutWidth) / 2,
-      //   y: (this.stage.canvas.height - layoutHeight) / 2 + 0.90 * layoutHeight
-      // })
-      // button1.addChild(bg1, text);
-      // bg1.addEventListener("click", console.log("butt"));
-      //
-      // let button2 = new createjs.Shape(); button2.graphics.beginStroke("black").drawRect(0,0, buttonWidth, buttonHeight);
-      // button2.set({
-      // 	x: (this.stage.canvas.width - layoutWidth) / 2 + buttonWidth,
-      //   y: (this.stage.canvas.height - layoutHeight) / 2 + 0.90 * layoutHeight
-      // });
-      //
-      //
-      // this.stage.addChild(layoutRect, button1, button2);
-      // this.stage.update();
-
-      // inputText.onkeyup = function() {
-      //   text.set({
-      //     text: inputText.value
-      //   })
-      //   this.stage.update()
-      // }
-
 }
