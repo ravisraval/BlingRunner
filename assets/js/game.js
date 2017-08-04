@@ -28,7 +28,7 @@ class Game {
     this.buff = false;
     this.deadlyBombChance = 8; //higher is less likely
     this.deadlyBomb = false;
-    this.freezeBombChance = 6; //higher is less likely
+    this.freezeBombChance = 2; //higher is less likely
     this.freezeBomb = false;
     this.freezeBombDuration = 3; //seconds
     this.buffDuration = 3; //seconds
@@ -77,13 +77,13 @@ class Game {
     this.canvas = document.getElementById("canvas");
     this.stage = new createjs.Stage(this.canvas);
     //titles
-    let overText = new createjs.Text("BLING RUNNER", "62px Arial", "#000000");
-    overText.x = 15;
+    let overText = new createjs.Text("BLING RUNNER", "62px Poppins", "#000000");
+    overText.x = 39;
     overText.y = 260;
     overText.textBaseline = "alphabetic";
     this.stage.addChild(overText);
-    let text = new createjs.Text("Press enter to continue!", "30px Arial", "#000000");
-    text.x = 100;
+    let text = new createjs.Text("Press enter to continue!", "30px Poppins", "#000000");
+    text.x = 73;
     text.y = 420;
     text.textBaseline = "alphabetic";
     this.stage.addChild(text);
@@ -92,13 +92,13 @@ class Game {
   }
 
   setup2(){
-    let blingText = new createjs.Text("Catch Some Bling!", "56px Arial", "#000000");
-    blingText.x = 15;
+    let blingText = new createjs.Text("Catch Some Bling!", "52px Poppins", "#000000");
+    blingText.x = 11;
     blingText.y = 260;
     blingText.textBaseline = "alphabetic";
     this.stage.addChild(blingText);
-    let arrowText = new createjs.Text("Use The Arrow Keys To Move.\n\n\n   Press Enter Again To Start", "30px Arial", "#000000");
-    arrowText.x = 55;
+    let arrowText = new createjs.Text("Use The Arrow Keys To Move.\n\n\n  Press Enter Again To Start", "30px Poppins", "#000000");
+    arrowText.x = 36;
     arrowText.y = 420;
     arrowText.textBaseline = "alphabetic";
     this.stage.addChild(arrowText);
@@ -286,10 +286,10 @@ class Game {
       }
     }
     document.getElementById('level').innerHTML = `Level: ${this.level}`;
-    document.getElementById('levelBlingsLeft').innerHTML = `Blings Left This Level: : ${this.levelBlingCount - this.blingCount}`;
+    document.getElementById('levelBlingsLeft').innerHTML = `Blings Left: ${this.levelBlingCount - this.blingCount}`;
     document.getElementById('accel').innerHTML = `Car Acceleration: ${this.accel.toFixed(2)}`;
     document.getElementById('fallspeed').innerHTML = `Bling Fall Speed: ${this.scrollSpeed}`;
-    document.getElementById('blingAppearRate').innerHTML = `Bling Pop Countdown: ${this.blingCountdown/100}`;
+    document.getElementById('blingAppearRate').innerHTML = `Next Level: ${this.blingCountdown/100}`;
     document.getElementById('friction').innerHTML = `Friction: ${(this.friction / .5) * 100}%`;
     //FUTURE: modify so user can catch last blings
     if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };
@@ -360,9 +360,9 @@ class Game {
         this.stage.update();
       } else {
         createjs.Ticker.removeEventListener("tick", this.handleTick);
-        this.pauseText = new createjs.Text("Game Paused", "70px Arial", "#F55555");
+        this.pauseText = new createjs.Text("Game Paused", "70px Poppins", "#F55555");
         this.toggleSound();
-        this.pauseText.x = 25;
+        this.pauseText.x = 5;
         this.pauseText.y = 300;
         this.pauseText.textBaseline = "alphabetic";
         this.stage.addChild(this.pauseText);
@@ -419,9 +419,9 @@ class Game {
     if ( this.userScoreCurrentLevel < this.levelScoreMin ) {
       this.handleGameOver();
     } else {
-      let text = new createjs.Text(`Level ${this.level} Complete! \n You have ${this.userScore} points.`, "50px Arial", "#000000");
+      let text = new createjs.Text(`  Level ${this.level} Complete! \n\n\nYou have ${this.userScore} points.`, "46px Poppins", "#FFFFFF");
       text.x = 30;
-      text.y = 300;
+      text.y = 200;
       text.textBaseline = "alphabetic";
       this.stage.addChild(text);
       //level up
@@ -432,9 +432,9 @@ class Game {
       this.userScoreCurrentLevel = 0;
       this.scrollSpeed = Math.floor(this.scrollSpeed * 1.35);
 
-      let continueText = new createjs.Text("Press space to continue.", "20px Arial", "#000000");
+      let continueText = new createjs.Text("Press space to continue.", "20px Poppins", "#FFFFFF");
       continueText.x = 150;
-      continueText.y = 450;
+      continueText.y = 470;
       text.textBaseline = "alphabetic";
       this.stage.addChild(continueText);
 
@@ -453,18 +453,18 @@ class Game {
   }
 
   handleGameOver() {
-    let text = new createjs.Text("You didn't grab enough blings!", "30px Arial", "#000000");
-    text.x = 50;
+    let text = new createjs.Text("You didn't grab enough blings!", "30px Poppins", "#FFFFFF");
+    text.x = 24;
     text.y = 200;
     text.textBaseline = "alphabetic";
     this.stage.addChild(text);
-    let overText = new createjs.Text("GAME OVER", "80px Arial", "#000000");
+    let overText = new createjs.Text("GAME OVER", "80px Poppins", "#FFFFFF");
     overText.x = 10;
     overText.y = 260;
     text.textBaseline = "alphabetic";
     this.stage.addChild(overText);
 
-    let resetText = new createjs.Text("Press space to play again.", "20px Arial", "#000000");
+    let resetText = new createjs.Text("Press space to play again.", "20px Poppins", "#FFFFFF");
     resetText.x = 120;
     resetText.y = 450;
     text.textBaseline = "alphabetic";
@@ -490,9 +490,9 @@ class Game {
 
   handleFreezeBomb() {
     window.removeEventListener("keydown", this.keyHandler);
-    let text = new createjs.Text(`SLEEPING GAS!`, "62px Arial", "#000000");
-    let text2 = new createjs.Text(`You fall asleep at the wheel for ${this.freezeBombDuration} seconds!`, "26px Arial", "#000000");
-    text.x = 17;
+    let text = new createjs.Text(`SLEEPING GAS!`, "62px Poppins", "#FFFFFF");
+    let text2 = new createjs.Text(`You fall asleep at the wheel for ${this.freezeBombDuration} seconds!`, "23px Poppins", "#FFFFFF");
+    text.x = 29;
     text.y = 70;
     text2.x = 10;
     text2.y = 150;
@@ -503,7 +503,6 @@ class Game {
        this.stage.update();
        window.addEventListener("keydown", this.keyHandler);
      }, this.freezeBombDuration * 1000);
-
   }
 
   handleBuff() {
@@ -516,19 +515,19 @@ class Game {
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     this.paused = true;
     this.stage.clear();
-    let text = new createjs.Text("You grabbed a bomb!", "30px Arial", "#000000");
-    text.x = 107;
+    let text = new createjs.Text("You grabbed a bomb!", "30px Poppins", "#FFFFFF");
+    text.x = 87;
     text.y = 200;
     text.textBaseline = "alphabetic";
     this.stage.addChild(text);
-    let overText = new createjs.Text("GAME OVER", "80px Arial", "#000000");
-    overText.x = 10;
+    let overText = new createjs.Text("GAME OVER", "80px Poppins", "#FFFFFF");
+    overText.x = 13;
     overText.y = 260;
     text.textBaseline = "alphabetic";
     this.stage.addChild(overText);
 
-    let resetText = new createjs.Text("Press space to play again.", "20px Arial", "#000000");
-    resetText.x = 120;
+    let resetText = new createjs.Text("Press space to play again.", "20px Poppins", "#FFFFFF");
+    resetText.x = 118;
     resetText.y = 450;
     text.textBaseline = "alphabetic";
     this.stage.addChild(resetText);

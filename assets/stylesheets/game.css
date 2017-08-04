@@ -1,14 +1,23 @@
 html {
   height: 100%;
   text-align: center;
+  font-family: 'Libre Baskerville', serif;
+
 
 }
 
 .instructions {
 width:400px;
 }
+
+h1{
+/*margin-top: 10px;*/
+margin-bottom: 15px;
+}
+
 h5{
   margin:10px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .game-container {
@@ -20,7 +29,17 @@ h5{
 
 }
 
+.control-stat {
+  display: flex;
+  flex-direction: row;
+  height: 240px;
+}
+
+/*controls {
+
+}*/
 ul {
+  font-family: 'Poppins', sans-serif;
   list-style: none;
   display:flex;
   flex-flow: column;
