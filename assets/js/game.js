@@ -275,7 +275,7 @@ class Game {
       for(let i = 0; i < this.blingCount; i++) {
         fn.hitBling = false;
         fn.blings[i].y += fn.scrollSpeed;
-        if (ndgmr.checkPixelCollision(fn.blings[i], fn.userCar)) {
+        if (ndgmr.checkRectCollision(fn.blings[i], fn.userCar)) {
           fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
           fn.stage.removeChild(fn.blings[i]);
           fn.userScore += 1;
