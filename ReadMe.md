@@ -43,3 +43,4 @@ BlingRunner's core functionality could be improved upon with the following featu
 *  Bombs or Buffs can do different things - some slow you down, some speed you up, some make your car more responsive, friction, acceleration, top speed, some cause game over.
 *  Ability to charge (fast acceleration) to destroy impediments (orange barrels?)
 *  Checkered Finish lines at the end of a level.
+*  hit a jump, car scales up and back down - with a deadly crevice
