@@ -28,7 +28,7 @@ class Game {
     this.buff = false;
     this.deadlyBombChance = 8; //higher is less likely
     this.deadlyBomb = false;
-    this.freezeBombChance = 2; //higher is less likely
+    this.freezeBombChance = 8; //higher is less likely
     this.freezeBomb = false;
     this.freezeBombDuration = 3; //seconds
     this.buffDuration = 3; //seconds
