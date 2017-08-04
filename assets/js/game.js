@@ -287,7 +287,7 @@ class Game {
     document.getElementById('levelBlingsLeft').innerHTML = `Blings Left: ${this.levelBlingCount - this.blingCount}`;
     document.getElementById('accel').innerHTML = `Car Acceleration: ${this.accel.toFixed(2)}`;
     document.getElementById('fallspeed').innerHTML = `Bling Fall Speed: ${this.scrollSpeed}`;
-    document.getElementById('blingAppearRate').innerHTML = `Next Level: ${this.blingCountdown/100}`;
+    document.getElementById('blingAppearRate').innerHTML = `Next Bling: ${this.blingCountdown/10}`;
     document.getElementById('friction').innerHTML = `Friction: ${(this.friction / .5) * 100}%`;
     //FUTURE: modify so user can catch last blings
     if (this.blingCount === this.levelBlingCount) { this.handleLevelOver() };

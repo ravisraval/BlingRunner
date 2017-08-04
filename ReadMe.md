@@ -50,18 +50,19 @@ BlingRunner uses the CreateJS suite to display images and play sound. In particu
 ## Potential Bonus Features
 
 BlingRunner's core functionality could be improved upon with the following features:
-*  Bombs!!!!!!
 *  Upgrades available via store after every level
 *  Unlimited mode vs levels
 *  start button
 *  friction modifier
-*  fix collision????????????????????
-*  end level when all blings are out of canvas
-*  Make a legit timed countdown from # blings left x bling pop countdown
-*  startup music &
-*  Add striped roads - have them speed up and slow down with the speed of the objects
-*  Bombs or Buffs can do different things - some slow you down, some speed you up, some make your car more responsive, friction, acceleration, top speed, some cause game over.
+*  End level when all blings are out of canvas
+*  Make a timed countdown from # blings left x bling pop countdown
+*  Startup music & buff/debuff sound FX
 *  Ability to charge (fast acceleration) to destroy impediments (orange barrels?)
 *  Checkered Finish lines at the end of a level.
 *  hit a jump, car scales up and back down - with a deadly crevice
+
+##Bugs
+*  Game motion is weird when replaying after game over.
 *  Investigate pressing two control buttons at once
+*  Collision
+*  Stats rendering
