@@ -33,7 +33,9 @@ class Game {
     this.freezeBombDuration = 3; //seconds
     this.buffDuration = 3; //seconds
     this.scrollSpeed = 4;
-    this.es = [];
+    this.scrollCounter = 0;
+    // this.es = [];ugh what was this
+    this.vlines = { 0: {}, 1: {}, 2: {}, 3: {} }; //option 1: pop and push line to array, where y is always -100
     this.blings = {};
     this.iceMode = true;
     this.blingCountdownStart = 250;
@@ -131,123 +133,57 @@ class Game {
     this.userCar = new createjs.Bitmap("assets/images/Topdown_vehicle_sprites_pack/Black_viper.png");
     this.userCar.crossOrigin = "Anonymous";
     this.userCar.setTransform(190,480,.5,.5);
-    createjs.Ticker.addEventListener("tick", this.handleTick);
     this.stage.addChild(road);
     this.drawVertLines();
     this.stage.addChild(this.userCar);
     this.stage.update();
+    createjs.Ticker.addEventListener("tick", this.handleTick);
     this.paused = false;
     this.handleKeyPress();
-    // this.drawHorizLines();
-  }
-
-  drawHorizLines() {
-    this.hline1 = new createjs.Shape();
-    this.hline1.crossOrigin = "Anonymous";
-    this.stage.addChild(this.hline1);
-    this.hline1.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
-    this.hline1.graphics.moveTo(0,0);
-    this.hline1.graphics.lineTo(500,0);
-    this.hline1.graphics.endStroke();
-
-    this.hline2 = new createjs.Shape();
-    this.hline2.crossOrigin = "Anonymous";
-    this.stage.addChild(this.hline2);
-    this.hline2.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
-    this.hline2.graphics.moveTo(0,100);
-    this.hline2.graphics.lineTo(500,100);
-    this.hline2.graphics.endStroke();
-
-    this.hline3 = new createjs.Shape();
-    this.hline3.crossOrigin = "Anonymous";
-    this.stage.addChild(this.hline3);
-    this.hline3.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
-    this.hline3.graphics.moveTo(0,200);
-    this.hline3.graphics.lineTo(500,200);
-    this.hline3.graphics.endStroke();
-
-    this.hline4 = new createjs.Shape();
-    this.hline4.crossOrigin = "Anonymous";
-    this.stage.addChild(this.hline4);
-    this.hline4.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
-    this.hline4.graphics.moveTo(0,300);
-    this.hline4.graphics.lineTo(500,300);
-    this.hline4.graphics.endStroke();
-
-    this.hline5 = new createjs.Shape();
-    this.hline5.crossOrigin = "Anonymous";
-    this.stage.addChild(this.hline5);
-    this.hline5.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,.8)");
-    this.hline5.graphics.moveTo(0,400);
-    this.hline5.graphics.lineTo(500,400);
-    this.hline5.graphics.endStroke();
-
-    this.hlines = [this.hline1, this.hline2, this.hline3, this.hline4, this.hline5];
   }
 
   drawVertLines() {
-    this.vline1 = new createjs.Shape();
-    this.vline1.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline1);
-    this.vline1.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline1.graphics.moveTo(100,0);
-    this.vline1.graphics.lineTo(100,100);
-    this.vline1.graphics.endStroke();
+    let fn = this;
+    for (let i = 0; i < 4; i++) {
+      this.vlines[i][0] = new createjs.Shape();
+      this.vlines[i][0].crossOrigin = "Anonymous";
+      this.stage.addChild(this.vlines[i][0]);
+      this.vlines[i][0].graphics.setStrokeStyle(2).beginStroke("#fad201");
+      this.vlines[i][0].graphics.moveTo(100 + 100 * i, 0);
+      this.vlines[i][0].graphics.lineTo(100 + 100 * i, 100);
+      this.vlines[i][0].graphics.endStroke();
 
-    this.vline1 = new createjs.Shape();
-    this.vline1.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline1);
-    this.vline1.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline1.graphics.moveTo(100,0);
-    this.vline1.graphics.lineTo(100,100);
-    this.vline1.graphics.endStroke();
+      this.vlines[i][1] = new createjs.Shape();
+      this.vlines[i][1].crossOrigin = "Anonymous";
+      this.stage.addChild(this.vlines[i][1]);
+      this.vlines[i][1].graphics.setStrokeStyle(2).beginStroke("#fad201");
+      this.vlines[i][1].graphics.moveTo(100 + 100 * i, 150);
+      this.vlines[i][1].graphics.lineTo(100 + 100 * i, 250);
+      this.vlines[i][1].graphics.endStroke();
 
-    this.vline1 = new createjs.Shape();
-    this.vline1.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline1);
-    this.vline1.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline1.graphics.moveTo(100,0);
-    this.vline1.graphics.lineTo(100,100);
-    this.vline1.graphics.endStroke();
+      this.vlines[i][2] = new createjs.Shape();
+      this.vlines[i][2].crossOrigin = "Anonymous";
+      this.stage.addChild(this.vlines[i][2]);
+      this.vlines[i][2].graphics.setStrokeStyle(2).beginStroke("#fad201");
+      this.vlines[i][2].graphics.moveTo(100 + 100 * i, 300);
+      this.vlines[i][2].graphics.lineTo(100 + 100 * i, 400);
+      this.vlines[i][2].graphics.endStroke();
 
-    this.vline1 = new createjs.Shape();
-    this.vline1.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline1);
-    this.vline1.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline1.graphics.moveTo(100,0);
-    this.vline1.graphics.lineTo(100,100);
-    this.vline1.graphics.endStroke();
-
-    this.vline2 = new createjs.Shape();
-    this.vline2.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline2);
-    this.vline2.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline2.graphics.moveTo(200,0);
-    this.vline2.graphics.lineTo(200,100);
-    this.vline2.graphics.endStroke();
-
-    this.vline3 = new createjs.Shape();
-    this.vline3.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline3);
-    this.vline3.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline3.graphics.moveTo(300,0);
-    this.vline3.graphics.lineTo(300,100);
-    this.vline3.graphics.endStroke();
-
-    this.vline4 = new createjs.Shape();
-    this.vline4.crossOrigin = "Anonymous";
-    this.stage.addChild(this.vline4);
-    this.vline4.graphics.setStrokeStyle(2).beginStroke("#fad201");
-    this.vline4.graphics.moveTo(400,0);
-    this.vline4.graphics.lineTo(400,100);
-    this.vline4.graphics.endStroke();
-    this.vlines.push(this.vline1, this.vline2, this.vline3, this.vline4)
+      this.vlines[i][3] = new createjs.Shape();
+      this.vlines[i][3].crossOrigin = "Anonymous";
+      this.stage.addChild(this.vlines[i][3]);
+      this.vlines[i][3].graphics.setStrokeStyle(2).beginStroke("#fad201");
+      this.vlines[i][3].graphics.moveTo(100 + 100 * i, 450);
+      this.vlines[i][3].graphics.lineTo(100 + 100 * i, 550);
+      this.vlines[i][3].graphics.endStroke();
+    }
   }
 
   handleBlingCollect(bling) {
     this.userScore += 1;
     this.stage.removeChild(bling);
   }
+
 
   handleTick(event) {
     this.blingCountdown -= 10;
@@ -303,17 +239,43 @@ class Game {
       this.blingCount += 1;
       createjs.Sound.play("blingCreate", {volume:.25});
     }
-    //move road
-    for(let i = 0; i < this.vlines.length; i++) {
-      this.vlines[i].y += this.scrollSpeed;
-      if (this.vlines[i].y === 600) {this.vlines[i].y = -100};
+    //pop/push road line if needed
+    this.scrollCounter += this.scrollSpeed;
+
+    if (this.scrollCounter >= 150) {
+      // this.stage.removeChild(this.vlines1.pop);
+      let fn = this;
+      for (let i = 0; i < 4; i++) {
+        console.log(this.scrollCounter);
+        console.log(fn.vlines[0][3]);
+        fn.stage.removeChild(fn.vlines[i][3]);
+        fn.vlines[i][3] = fn.vlines[i][2];
+        fn.vlines[i][2] = fn.vlines[i][1];
+        fn.vlines[i][1] = fn.vlines[i][0];
+        fn.vlines[i][0] = new createjs.Shape();
+        fn.vlines[i][0].crossOrigin = "Anonymous";
+        fn.stage.addChild(fn.vlines[i][0]);
+        fn.vlines[i][0].graphics.setStrokeStyle(2).beginStroke("#fad201");
+        fn.vlines[i][0].graphics.moveTo(100 + 100 * i,-100);
+        fn.vlines[i][0].graphics.lineTo(100 + 100 * i,0);
+        fn.vlines[i][0].graphics.endStroke();
+      }
+      this.scrollCounter -= 150;
     }
+    //move road
+    let fn = this;
+    for(let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        fn.vlines[i][j].y += fn.scrollSpeed;
+      }
+    }
+    //move blings
     if (this.blingCount > 0) {
       let fn = this;
       for(let i = 0; i < this.blingCount; i++) {
         fn.hitBling = false;
         fn.blings[i].y += fn.scrollSpeed;
-        if (ndgmr.checkRectCollision(fn.blings[i], fn.userCar)) {
+        if (ndgmr.checkPixelCollision(fn.blings[i], fn.userCar)) {
           fn.blingCaptureSound(fn.blings[i].graphics._fill.style); //pass in color
           fn.stage.removeChild(fn.blings[i]);
           fn.userScore += 1;
