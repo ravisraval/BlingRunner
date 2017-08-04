@@ -1,30 +1,86 @@
-html {
+/*reset*/
+
+html, body, h1, h2, h3, h4, h5, div, section, ul, li, figure, img, footer, a {
+  margin: 0;
+  border: 0;
+  padding: 0;
+
+  font: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  color: inherit;
+
+  background: transparent;
+  box-sizing: border-box;
+
+  list-style: none;
+  text-decoration: none;
+}
+
+/*defaults*/
+
+body, html {
   height: 100%;
+  min-height: 600px;
+  font-family: "Poppins",sans-serif;
+  font-weight: lighter;
+}
+
+a, select, button, Link:hover {
+  cursor: pointer;
+}
+
+
+.instructions, .bling-legend {
+width: 300px;
+min-width: 300px;
+border: 2px solid grey;
+}
+
+
+h1, h2, h3, h4, h5 {
   text-align: center;
-  font-family: 'Libre Baskerville', serif;
-
-
 }
 
-.instructions {
-width:400px;
-}
-
-h1{
+h1 {
 /*margin-top: 10px;*/
 margin-bottom: 15px;
+
+font-size: 30px;
+font-style: italic;
+}
+
+h2 {
+  border-bottom: 1px solid gray;
+  font-size: 25px;
+
+  margin: 10px 0;
+}
+
+h3 {
+  border-bottom: 2px solid gray;
+  font-size: 20px;
+
+  padding: 5px;
+}
+
+h4 {
+  font-size: 17px;
+  margin: 5px;
+  padding: 5px;
+  border-bottom: 1px solid lightgray;
 }
 
 h5{
   margin:10px;
   font-family: 'Poppins', sans-serif;
+  text-align: left;
+  font-size: 16px;
 }
 
 .game-container {
   display: flex;
   justify-content: center;
-  border: 2px solid grey;
-  width: 900px;
   height:620px;
 
 }
@@ -38,6 +94,31 @@ h5{
 /*controls {
 
 }*/
+
+.blings {
+  display: flex;
+  justify-content: center;
+}
+.bling {
+  height: 40px;
+  width: 40px;
+  margin: 10px
+}
+
+.power-up-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.power-up {
+  display: flex;
+
+  font-size: 12px;
+  text-align: left;
+  align-content: center;
+}
+
+
 ul {
   font-family: 'Poppins', sans-serif;
   list-style: none;
