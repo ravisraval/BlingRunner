@@ -3,7 +3,7 @@
 ## Background
 
 
-[BlingRunner](https://ravisraval.github.io/BlingRunner/) ([Github](https://github.com/ravisraval/BlingRunner) is a javascript browser game. Players control a car and must move the car over successive "blings": randomly generated objects on a scrolling board.
+[BlingRunner](https://ravisraval.github.io/BlingRunner/) ([Github](https://github.com/ravisraval/BlingRunner)) is a javascript browser game. Players control a car and must move the car over successive "blings": randomly generated objects on a scrolling board.
 
 ## Key Features, MVP
 ***
@@ -17,7 +17,7 @@
 ![Gameplay with Debuff](docs/debuff.png)
 
 
-  To build upon the excitement of the core gameplay, BlingRunner incorporates special beneficial or harmful blings. special, black blings are bombs that cause the player to instantly lose. Grey blings are sleeping gas, which disable all player input for three seconds. Finally, black & purple blings provide a temporary boost to player acceleration. These blings appear less frequently than the five core blings. To facilitate easier tweaking, this frequency is easily modified by changing one variable for each bling.
+  To build upon the excitement of the core gameplay, BlingRunner incorporates special beneficial or harmful blings. Specifically, black blings are bombs that cause the player to instantly lose. Grey blings are sleeping gas, which disable all player input for three seconds. Finally, black & purple blings provide a temporary boost to player acceleration. These blings appear less frequently than the five core blings. To facilitate easier tweaking, this frequency is easily modified by changing one variable for each bling.
 
 #### Bling Musical Playback
   Representing a staple of the rhythm music game genre, the five core blings each play a note when captured.
