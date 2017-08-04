@@ -242,7 +242,7 @@ class Game {
     //pop/push road line if needed
     this.scrollCounter += this.scrollSpeed;
 
-    if (this.scrollCounter >= 150) {
+    if (this.scrollCounter >= 200) {
       // this.stage.removeChild(this.vlines1.pop);
       let fn = this;
       for (let i = 0; i < 4; i++) {
@@ -260,7 +260,7 @@ class Game {
         fn.vlines[i][0].graphics.lineTo(100 + 100 * i,0);
         fn.vlines[i][0].graphics.endStroke();
       }
-      this.scrollCounter -= 150;
+      this.scrollCounter -= 200;
     }
     //move road
     let fn = this;
