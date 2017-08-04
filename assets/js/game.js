@@ -246,8 +246,6 @@ class Game {
       // this.stage.removeChild(this.vlines1.pop);
       let fn = this;
       for (let i = 0; i < 4; i++) {
-        console.log(this.scrollCounter);
-        console.log(fn.vlines[0][3]);
         fn.stage.removeChild(fn.vlines[i][3]);
         fn.vlines[i][3] = fn.vlines[i][2];
         fn.vlines[i][2] = fn.vlines[i][1];
