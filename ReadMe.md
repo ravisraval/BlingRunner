@@ -39,14 +39,6 @@
 ## Technologies Utilized
 BlingRunner uses the CreateJS suite to display images and play sound. In particular, EaselJS displays content on the canvas, and SoundJS assist handling audio loading and playback. All logic, including animation, is written in vanilla Javascript.
 
-
-##Implementation Timeline
-
-*  Day 1: Complete basic project setup, pause function, and car physics.
-*  Day 2: Complete board scrolling, bling generation, and item collision.
-*  Day 3: Complete point system, sounds, start styling and upgrades.
-*  Day 4: Complete styling and upgrades.
-
 ## Potential Bonus Features
 
 BlingRunner's core functionality could be improved upon with the following features:
@@ -66,3 +58,6 @@ BlingRunner's core functionality could be improved upon with the following featu
 *  Investigate pressing two control buttons at once
 *  Collision
 *  Stats rendering
+*  change blings to sprite sheets, add explosions
+*  make bombs actual bombs
+*  style - simplify instructions

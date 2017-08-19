@@ -11,19 +11,19 @@
   </head>
   <body onload="init()">
     <header><h1>Bling Runner</h1></header>
-    <div class="game-container">
-      <div class="instructions">
-        <h3>TL;DR: <br/> Catch the blings!</h3>
-        <h5>
-          To advance levels, you must grab enough blings. If you don't, game over.
-          <br/> <br/>
-          How many blings, you may ask? As many as you can!
-          <br/> <br/>
-          Every bling you grab increases your acceleration. Trust me here.. you'll need it later!
-          <br/> <br/>If the bling Gods feel you didn't collect enough blings, you're toast.
-      </h5>
-        <div class="control-stat">
-          <div class='controls'>
+    <div class="outer-container">
+    <div class="inner-container">
+        <div class="instructions">
+          <h3>TL;DR: <br/> Catch the blings!</h3>
+          <h5>
+            To advance levels, you must grab enough blings. If you don't, game over.
+            <br/> <br/>
+            How many blings, you may ask? As many as you can!
+            <br/> <br/>
+            Every bling you grab increases your acceleration. Trust me here.. you'll need it later!
+            <br/> <br/>If the bling Gods feel you didn't collect enough blings, you're toast.
+        </h5>
+          <div class="controls">
             <h3>Controls</h3>
             <ul>
               <li>Move car: arrow keys</li>
@@ -31,61 +31,61 @@
               <li>Mute: m</li>
             </ul>
           </div>
-          <div class='stats'>
-            <h3>Stats</h3>
-            <p id="level"></p>
-            <p id="levelBlingsLeft"></p>
-            <p id="accel"></p>
-            <p id="fallspeed"></p>
-            <p id="blingAppearRate"></p>
-            <p id="friction"></p>
-          </div>
         </div>
-      </div>
-      <canvas id="canvas" width="500" height="600" style="float: right; border: 10px solid black;"></canvas>
-    <div class="bling-legend">
+        <canvas id="canvas" width="500" height="600" style="float: right; border: 10px solid black;"></canvas>
+      <div class="bling-legend">
 
-      <section class="point-blings">
-        <h2>Blings</h2>
-        <h4> Collect these to gain points and level up </h4>
-        <div class="blings">
-          <img class="bling" src="assets/images/red.png" alt="red bling"/>
-          <img class="bling" src="assets/images/orange.png" alt="orange bling"/>
-          <img class="bling" src="assets/images/yellow.png" alt="yellow bling"/>
-          <img class="bling" src="assets/images/green.png" alt="green bling"/>
-          <img class="bling" src="assets/images/blue.png" alt="blue bling"/>
-        </div>
-      </section>
-
-      <section class="power-ups">
-        <h2>Power Ups</h2>
-        <ul class="power-up-list">
-          <li class="power-up-item">
-            <h4>Super-Speed</h4>
-            <div class="power-up">
-              <img class="bling" src="assets/images/super-speed.png" alt="super-speed power-up"/>
-            <p>Catching these blings will increase your top speed and acceleration stats!</p>
+        <section class="point-blings">
+          <h2>Blings</h2>
+          <h4> Collect these to gain points and level up </h4>
+          <div class="blings">
+            <img class="bling" src="assets/images/red.png" alt="red bling"/>
+            <img class="bling" src="assets/images/orange.png" alt="orange bling"/>
+            <img class="bling" src="assets/images/yellow.png" alt="yellow bling"/>
+            <img class="bling" src="assets/images/green.png" alt="green bling"/>
+            <img class="bling" src="assets/images/blue.png" alt="blue bling"/>
           </div>
-          </li>
-          <li class="power-up-item">
-            <h4>Sleeping Gas</h4>
-            <div class="power-up">
-              <img class="bling" src="assets/images/sleeping-gas.png" alt="sleeping gas power-up"/>
-              <p>These cause you to fall asleep and lose control of your vehicle for 3 seconds</p>
+        </section>
+
+        <section class="power-ups">
+          <h2>Power Ups</h2>
+          <ul class="power-up-list">
+            <li class="power-up-item">
+              <h4>Super-Speed</h4>
+              <div class="power-up">
+                <img class="bling" src="assets/images/super-speed.png" alt="super-speed power-up"/>
+              <p>Catching these blings will increase your top speed and acceleration stats!</p>
             </div>
-          </li>
-          <li class="power-up-item">
-            <h4>Bomb</h4>
-            <div class="power-up">
-              <img class="bling" src="assets/images/bomb.png" alt="bomb power-up"/>
-             <p>AVOID THESE at all costs! Bombs will immediately end your run!</p>
-           </div>
-          </li>
-        </ul>
-      </section>
+            </li>
+            <li class="power-up-item">
+              <h4>Sleeping Gas</h4>
+              <div class="power-up">
+                <img class="bling" src="assets/images/sleeping-gas.png" alt="sleeping gas power-up"/>
+                <p>These cause you to fall asleep and lose control of your vehicle for 3 seconds</p>
+              </div>
+            </li>
+            <li class="power-up-item">
+              <h4>Bomb</h4>
+              <div class="power-up">
+                <img class="bling" src="assets/images/bomb.png" alt="bomb power-up"/>
+               <p>AVOID THESE at all costs! Bombs will immediately end your run!</p>
+             </div>
+            </li>
+          </ul>
+        </section>
 
+      </div> <!-- bling legend -->
+    </div> <!-- inner-container -->
+    <div class='stats'>
+      <h6 class='stat'>Stats</h6>
+      <p id="level" class='stat'></p>
+      <p id="levelBlingsLeft" class='stat'></p>
+      <p id="accel" class='stat'></p>
+      <p id="fallspeed" class='stat'></p>
+      <p id="blingAppearRate" class='stat'></p>
+      <p id="friction" class='stat'></p>
     </div>
-  </div>
+  </div> <!-- outer-container -->
   <footer>
   </footer>
   </body>
